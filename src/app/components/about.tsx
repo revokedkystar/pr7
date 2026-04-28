@@ -1,9 +1,72 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function About() {
+    const sectionRef = useRef<HTMLElement>(null);
+    const img1Ref = useRef<HTMLDivElement>(null);
+    const img2Ref = useRef<HTMLDivElement>(null);
+    const textRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            if (!sectionRef.current) return;
+            
+            // Scrubbing for the first (top/left) image
+            gsap.fromTo(img1Ref.current,
+                { y: 80 },
+                {
+                    y: -50,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: 1,
+                    }
+                }
+            );
+
+            // Scrubbing for the second (bottom/right) image, moves faster
+            gsap.fromTo(img2Ref.current,
+                { y: 150 },
+                {
+                    y: -100,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: 1.5,
+                    }
+                }
+            );
+
+            // Scrubbing for the text content
+            gsap.fromTo(textRef.current,
+                { y: 40, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: 'top 80%',
+                        end: 'top 30%',
+                        scrub: 1,
+                    }
+                }
+            );
+        }, sectionRef);
+
+        return () => ctx.revert();
+    }, []);
+
     return (
-        <section className="about-section" style={{
+        <section ref={sectionRef} className="about-section" style={{
             width: '100%',
             position: 'relative',
             zIndex: 10,
@@ -64,7 +127,7 @@ export default function About() {
                 {/* Left Column (Desktop) / Bottom Row (Mobile): Visual Assets */}
                 <div className="about-visuals" style={{ position: 'relative', height: 'var(--img-container-h)' }}>
                     {/* Top Asset - Framed like a UI window */}
-                    <div style={{
+                    <div ref={img1Ref} style={{
                         position: 'absolute',
                         top: 0,
                         left: 0,
@@ -98,12 +161,12 @@ export default function About() {
                         </div>
                         {/* Content */}
                         <div style={{ padding: '0', background: '#000' }}>
-                            <img src="/gifs/deadsec.gif" alt="Deadsec" style={{ width: '100%', display: 'block', filter: 'grayscale(100%) contrast(120%)' }} />
+                            <img src="/gifs/deadsec.gif" alt="Deadsec" style={{ width: '100%', display: 'block', filter: 'var(--media-invert) grayscale(100%) contrast(120%)' }} />
                         </div>
                     </div>
 
                     {/* Bottom Asset - Offset and overlapping */}
-                    <div style={{
+                    <div ref={img2Ref} style={{
                         position: 'absolute',
                         bottom: '20px',
                         right: 0,
@@ -143,7 +206,7 @@ export default function About() {
                 </div>
 
                 {/* Right Column (Desktop) / Top Row (Mobile): Text Content */}
-                <div className="about-content" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <div ref={textRef} className="about-content" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <div style={{ marginBottom: '40px' }}>
                         <span style={{ 
                             color: '#fff', 

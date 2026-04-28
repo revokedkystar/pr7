@@ -1,7 +1,15 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Capabilities() {
+    const sectionRef = useRef<HTMLElement>(null);
+    const titleRef = useRef<HTMLDivElement>(null);
+    const orbitRef = useRef<HTMLDivElement>(null);
+
     // Flattened array of all your skills with their respective stack types
     const skills = [
         { name: 'Amazon', type: 'CLOUD', src: '/icons/amazon.svg' },
@@ -33,8 +41,49 @@ export default function Capabilities() {
         return { x: `${x.toFixed(3)}%`, y: `${y.toFixed(3)}%` };
     };
 
+    // GSAP ScrollTrigger Animations
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            if (!sectionRef.current) return;
+
+            // Scrubbing for title
+            gsap.fromTo(titleRef.current,
+                { y: 80, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: 'top 85%',
+                        end: 'top 40%',
+                        scrub: 1,
+                    }
+                }
+            );
+
+            // Scrubbing for orbit container
+            gsap.fromTo(orbitRef.current,
+                { scale: 0.8, opacity: 0 },
+                {
+                    scale: 1,
+                    opacity: 1,
+                    ease: 'back.out(1.7)',
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: 'top 70%',
+                        end: 'top 20%',
+                        scrub: 1.5,
+                    }
+                }
+            );
+        }, sectionRef);
+
+        return () => ctx.revert();
+    }, []);
+
     return (
-        <section className="capabilities-wrapper" style={{
+        <section ref={sectionRef} className="capabilities-wrapper" style={{
             width: '100%',
             position: 'relative',
             zIndex: 10,
@@ -90,7 +139,7 @@ export default function Capabilities() {
                 }
             `}} />
 
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '40px', zIndex: 1 }}>
+            <div ref={titleRef} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '40px', zIndex: 1 }}>
                 <span style={{ 
                     color: 'rgba(255,255,255,0.4)', 
                     fontSize: '0.8rem', 
@@ -118,7 +167,7 @@ export default function Capabilities() {
             </div>
 
             {/* Orbital Wheel Container */}
-            <div style={{
+            <div ref={orbitRef} style={{
                 position: 'relative',
                 width: '100%',
                 maxWidth: 'var(--orbit-max-width)',
@@ -187,7 +236,7 @@ export default function Capabilities() {
                                         width: '100%',
                                         height: '100%',
                                         objectFit: 'contain',
-                                        filter: isHovered || isActive ? 'grayscale(0%) opacity(1)' : 'grayscale(100%) opacity(0.4)',
+                                        filter: isHovered || isActive ? 'var(--media-invert) grayscale(0%) opacity(1)' : 'var(--media-invert) grayscale(100%) opacity(0.4)',
                                         transition: 'all 0.3s ease',
                                     }}
                                     onError={() => {

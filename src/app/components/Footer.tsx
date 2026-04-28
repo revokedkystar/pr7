@@ -125,8 +125,12 @@ export default function Footer() {
                             <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.2em', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>
                                 DIR_SOCIALS
                             </span>
-                            {['Twitter / X', 'Instagram', 'LinkedIn'].map((link) => (
-                                <a key={link} href="#" style={{ 
+                            {[
+                                { name:'Twitter / X', url: 'https://x.com/h4tfi3ld' },
+                                { name: 'Instagram', url: 'https://instagram.com/kovagraphic' }, 
+                                { name: 'LinkedIn', url: 'https://linkedin.com/in/h4tfi3ld/' }
+                                ].map((link) => (
+                                <a key={link.name} href={link.url} style={{ 
                                     color: 'rgba(255,255,255,0.8)', 
                                     textDecoration: 'none', 
                                     fontSize: '1rem', 
@@ -142,7 +146,7 @@ export default function Footer() {
                                     e.currentTarget.style.color = 'rgba(255,255,255,0.8)';
                                     e.currentTarget.style.transform = 'translateX(0)';
                                 }}>
-                                    {'> '} {link}
+                                    {'> '} {link.name}
                                 </a>
                             ))}
                         </div>

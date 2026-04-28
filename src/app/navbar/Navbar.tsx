@@ -1,4 +1,4 @@
-import React, { ReactNode, AnchorHTMLAttributes } from 'react';
+import React, { ReactNode, AnchorHTMLAttributes, useState, useEffect } from 'react';
 
 interface NavLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
@@ -19,6 +19,31 @@ interface NavbarProps {
 }
 
 export default function Navbar({ className }: NavbarProps) {
+  const [isLightMode, setIsLightMode] = useState(false);
+
+  useEffect(() => {
+    // Check local storage or default to dark (false)
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'light') {
+      setIsLightMode(true);
+      document.documentElement.classList.add('light-mode');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    setIsLightMode((prev) => {
+      const newMode = !prev;
+      if (newMode) {
+        document.documentElement.classList.add('light-mode');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.remove('light-mode');
+        localStorage.setItem('theme', 'dark');
+      }
+      return newMode;
+    });
+  };
+
   return (
     <div
       className={className ? `${className} navbar-blur` : 'navbar-blur'}
@@ -31,7 +56,7 @@ export default function Navbar({ className }: NavbarProps) {
         // Fluid height: 64px on mobile, scales up to 80px on large screens
         height: 'clamp(64px, 8vw, 80px)',
         fontFamily: 'NavFont, Geist, system-ui, sans-serif',
-        backdropFilter: 'blur(35px)', // Fixed typo from '35x'
+        backdropFilter: 'blur(35px)',
         WebkitBackdropFilter: 'blur(35px)',
       }}
     >
@@ -101,14 +126,49 @@ export default function Navbar({ className }: NavbarProps) {
         </a>
       </div>
 
-      {/* Contact Button (right side) */}
+      {/* Right side controls (Theme Toggle + Contact) */}
       <div style={{ 
           position: 'absolute', 
           // Fluid edge spacing
           right: 'clamp(16px, 5vw, 48px)', 
           top: '45%', 
-          transform: 'translateY(-50%)' 
+          transform: 'translateY(-50%)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 'clamp(12px, 2vw, 24px)'
       }}>
+        {/* Theme Toggle Button */}
+        <button
+          onClick={toggleTheme}
+          style={{
+            background: 'transparent',
+            border: '1px solid rgba(255,255,255,0.3)',
+            borderRadius: '50%',
+            width: 'clamp(36px, 4vw, 44px)',
+            height: 'clamp(36px, 4vw, 44px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#fff',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent';
+          }}
+          aria-label="Toggle Theme"
+        >
+          {isLightMode ? (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          ) : (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          )}
+        </button>
+
+        {/* Contact Button */}
         <a
           href="/contact"
           style={{
@@ -144,4 +204,3 @@ export default function Navbar({ className }: NavbarProps) {
     </div>
   );
 }
-// hello!"!!!"joshua is here!!!

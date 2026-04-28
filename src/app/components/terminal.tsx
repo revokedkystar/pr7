@@ -1,7 +1,15 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function TechStack() {
+    const sectionRef = useRef<HTMLElement>(null);
+    const textColRef = useRef<HTMLDivElement>(null);
+    const termColRef = useRef<HTMLDivElement>(null);
+
     // Front-End Terminal Code Snippets
     const snippets: Record<string, { file: string, code: string }> = {
         'HTML': { 
@@ -27,6 +35,47 @@ export default function TechStack() {
     const [displayedText, setDisplayedText] = useState("");
     const [isTyping, setIsTyping] = useState(true);
 
+    // GSAP ScrollTrigger Animations
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            if (!sectionRef.current) return;
+
+            // Scrubbing for text column
+            gsap.fromTo(textColRef.current,
+                { y: 60, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: 'top 85%',
+                        end: 'top 35%',
+                        scrub: 1,
+                    }
+                }
+            );
+
+            // Scrubbing for terminal column
+            gsap.fromTo(termColRef.current,
+                { y: 100, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: 'top 80%',
+                        end: 'top 30%',
+                        scrub: 1.5,
+                    }
+                }
+            );
+        }, sectionRef);
+
+        return () => ctx.revert();
+    }, []);
+
     // Typewriter Effect Logic
     useEffect(() => {
         let i = 0;
@@ -48,7 +97,7 @@ export default function TechStack() {
     }, [activeTab]);
 
     return (
-        <section className="techstack-section" style={{
+        <section ref={sectionRef} className="techstack-section" style={{
             width: '100%',
             position: 'relative',
             zIndex: 10,
@@ -120,7 +169,7 @@ export default function TechStack() {
                 }}>
                     
                     {/* Left Column: Typography */}
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
+                    <div ref={textColRef} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
                         <div style={{ marginBottom: '30px', display: 'flex', alignItems: 'center', gap: '15px', width: '100%' }}>
                             <span style={{ 
                                 color: 'rgba(255,255,255,0.4)', 
@@ -192,7 +241,7 @@ export default function TechStack() {
                     </div>
 
                     {/* Right Column: macOS Style Glass Container for Console */}
-                    <div style={{
+                    <div ref={termColRef} style={{
                         width: '100%',
                         border: '1px solid rgba(255,255,255,0.15)',
                         borderRadius: '12px',

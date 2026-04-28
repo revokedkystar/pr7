@@ -193,3 +193,16 @@ body {
     src: url('./fonts/textfont.woff2') format('woff2');
     font-display: swap;
 }
+
+/* Light mode overrides using CSS filter inversion */
+html.light-mode {
+    filter: invert(1) hue-rotate(180deg);
+    --media-invert: invert(1) hue-rotate(180deg);
+}
+
+/* Invert images and media back to original colors */
+html.light-mode img,
+html.light-mode video,
+html.light-mode canvas {
+    filter: invert(1) hue-rotate(180deg);
+}

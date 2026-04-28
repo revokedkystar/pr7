@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -7,6 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function MoreGraphics() {
     const gridRef = useRef<HTMLDivElement>(null);
+    const [expandedItem, setExpandedItem] = useState<{id: string, src: string, label: string} | null>(null);
 
     // Randomized array mixing GIFs and PNGs to create a dynamic bento layout
     const galleryItems = [
@@ -47,6 +48,18 @@ export default function MoreGraphics() {
 
         return () => ctx.revert();
     }, []);
+
+    // Prevent body scrolling when modal is open
+    useEffect(() => {
+        if (expandedItem) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [expandedItem]);
 
     return (
         <section style={{
@@ -108,6 +121,22 @@ export default function MoreGraphics() {
                         grid-row: span 1; 
                     }
                 }
+
+                /* Modal Animation */
+                .modal-enter {
+                    animation: modalFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                }
+                .modal-content-enter {
+                    animation: modalScaleUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                }
+                @keyframes modalFadeIn {
+                    from { opacity: 0; backdrop-filter: blur(0px); }
+                    to { opacity: 1; backdrop-filter: blur(20px); }
+                }
+                @keyframes modalScaleUp {
+                    from { transform: scale(0.95) translateY(20px); opacity: 0; }
+                    to { transform: scale(1) translateY(0); opacity: 1; }
+                }
             `}} />
 
             <div style={{
@@ -150,7 +179,9 @@ export default function MoreGraphics() {
                 <div ref={gridRef} className="kova-bento-grid">
                     {galleryItems.map((item, index) => (
                         <div key={item.id} className={`bento-card-${index} bento-item-anim`} style={{ height: '100%' }}>
-                            <div style={{
+                            <div 
+                                onClick={() => setExpandedItem(item)}
+                                style={{
                                 width: '100%',
                                 height: '100%',
                                 border: '1px solid rgba(255,255,255,0.15)',
@@ -170,14 +201,14 @@ export default function MoreGraphics() {
                                 e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.8)';
                                 e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)';
                                 const imgEl = e.currentTarget.querySelector('img');
-                                if (imgEl) imgEl.style.filter = 'grayscale(0%) brightness(100%)';
+                                if (imgEl) imgEl.style.filter = 'var(--media-invert) grayscale(0%) brightness(100%)';
                             }}
                             onMouseLeave={(e) => {
                                 e.currentTarget.style.transform = 'translateY(0)';
                                 e.currentTarget.style.boxShadow = 'none';
                                 e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)';
                                 const imgEl = e.currentTarget.querySelector('img');
-                                if (imgEl) imgEl.style.filter = 'grayscale(100%) brightness(70%)';
+                                if (imgEl) imgEl.style.filter = 'var(--media-invert) grayscale(100%) brightness(70%)';
                             }}
                             >
                                 {/* macOS Window Header */}
@@ -211,7 +242,7 @@ export default function MoreGraphics() {
                                             height: '100%',
                                             display: 'block',
                                             objectFit: 'cover',
-                                            filter: 'grayscale(100%) brightness(70%)',
+                                            filter: 'var(--media-invert) grayscale(100%) brightness(70%)',
                                             transition: 'filter 0.5s ease',
                                         }} 
                                     />
@@ -221,6 +252,85 @@ export default function MoreGraphics() {
                     ))}
                 </div>
             </div>
+
+            {/* Expanded Modal Overlay */}
+            {expandedItem && (
+                <div 
+                    className="modal-enter"
+                    onClick={() => setExpandedItem(null)}
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100vw',
+                        height: '100vh',
+                        zIndex: 9999, // Super high z-index to cover everything
+                        background: 'rgba(0, 0, 0, 0.8)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: 'clamp(20px, 5vw, 60px)',
+                        cursor: 'pointer',
+                    }}
+                >
+                    <div 
+                        className="modal-content-enter"
+                        onClick={(e) => e.stopPropagation()} // Prevent clicks inside from closing
+                        style={{
+                            width: '100%',
+                            maxWidth: '1200px',
+                            maxHeight: '90vh',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            border: '1px solid rgba(255,255,255,0.2)',
+                            borderRadius: '16px',
+                            overflow: 'hidden',
+                            background: 'rgba(20, 20, 20, 0.95)',
+                            boxShadow: '0 50px 100px -20px rgba(0, 0, 0, 1)',
+                            cursor: 'default',
+                        }}
+                    >
+                        {/* Modal macOS Header */}
+                        <div style={{ 
+                            height: '48px', 
+                            background: 'rgba(255, 255, 255, 0.05)', 
+                            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            padding: '0 20px', 
+                            gap: '12px',
+                            flexShrink: 0,
+                        }}>
+                            <div 
+                                onClick={() => setExpandedItem(null)}
+                                style={{ width: '14px', height: '14px', borderRadius: '50%', background: '#FF5F56', cursor: 'pointer' }} 
+                            />
+                            <div style={{ width: '14px', height: '14px', borderRadius: '50%', background: '#FFBD2E' }} />
+                            <div style={{ width: '14px', height: '14px', borderRadius: '50%', background: '#27C93F' }} />
+                            
+                            <span style={{ marginLeft: 'auto', color: 'rgba(255,255,255,0.5)', fontSize: '12px', letterSpacing: '2px', fontFamily: 'sans-serif' }}>
+                                {expandedItem.label}
+                            </span>
+                        </div>
+                        
+                        {/* Expanded Image */}
+                        <div style={{ flex: 1, background: '#000', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <img 
+                                src={expandedItem.src} 
+                                alt={`Expanded view of ${expandedItem.label}`} 
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    maxHeight: 'calc(90vh - 48px)',
+                                    objectFit: 'contain',
+                                    display: 'block',
+                                    filter: 'var(--media-invert)', // Original colors
+                                }} 
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
         </section>
     );
 }

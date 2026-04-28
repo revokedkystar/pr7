@@ -8,7 +8,7 @@ export default function KovaGraphic() {
             position: 'relative',
             zIndex: 10,
         }}>
-            {/* Injected CSS Variables for Responsiveness */}
+            {/* Injected CSS Variables for Responsiveness and Card Animations */}
             <style dangerouslySetInnerHTML={{__html: `
                 .kova-section {
                     --section-pad: 120px 40px;
@@ -43,6 +43,51 @@ export default function KovaGraphic() {
                         --nav-btn-size: 40px;
                         --details-dir: column; /* Stacks the Software/Socials area */
                     }
+                }
+
+                /* Flip and Pop Hover CSS */
+                .kova-card-wrapper {
+                    perspective: 1200px;
+                }
+                .kova-card-wrapper.is-center:hover {
+                    transform: translateX(0) scale(1.05) !important;
+                    z-index: 50 !important;
+                }
+                .kova-card-inner {
+                    position: relative;
+                    width: 100%;
+                    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+                    transform-style: preserve-3d;
+                }
+                .kova-card-inner.is-flipped {
+                    transform: rotateY(180deg);
+                }
+                .kova-card-front, .kova-card-back {
+                    width: 100%;
+                    -webkit-backface-visibility: hidden;
+                    backface-visibility: hidden;
+                    border: 1px solid rgba(255,255,255,0.15);
+                    border-radius: 12px;
+                    overflow: hidden;
+                    background: rgba(20, 20, 20, 0.6);
+                    backdrop-filter: blur(16px);
+                    -webkit-backdrop-filter: blur(16px);
+                    transition: box-shadow 0.4s ease;
+                }
+                .kova-card-front {
+                    position: relative;
+                    z-index: 2;
+                    transform: rotateY(0deg);
+                }
+                .kova-card-back {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    transform: rotateY(180deg);
+                    background: rgba(10, 10, 10, 0.9);
+                    display: flex;
+                    flex-direction: column;
                 }
             `}} />
 
@@ -150,9 +195,17 @@ export default function KovaGraphic() {
 
 function GraphicCycler({ images }: { images: number[] }) {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [flippedStates, setFlippedStates] = useState<Record<number, boolean>>({});
 
-    const handleNext = () => setActiveIndex((prev) => (prev + 1) % images.length);
-    const handlePrev = () => setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
+    const handleNext = () => {
+        setActiveIndex((prev) => (prev + 1) % images.length);
+        setFlippedStates({});
+    };
+    
+    const handlePrev = () => {
+        setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
+        setFlippedStates({});
+    };
 
     return (
         <div style={{
@@ -169,7 +222,7 @@ function GraphicCycler({ images }: { images: number[] }) {
                 style={{
                     position: 'absolute',
                     left: '0px',
-                    zIndex: 40,
+                    zIndex: 60,
                     background: 'rgba(255,255,255,0.1)',
                     border: '1px solid rgba(255,255,255,0.2)',
                     borderRadius: '50%',
@@ -197,7 +250,7 @@ function GraphicCycler({ images }: { images: number[] }) {
                 style={{
                     position: 'absolute',
                     right: '0px',
-                    zIndex: 40,
+                    zIndex: 60,
                     background: 'rgba(255,255,255,0.1)',
                     border: '1px solid rgba(255,255,255,0.2)',
                     borderRadius: '50%',
@@ -260,21 +313,18 @@ function GraphicCycler({ images }: { images: number[] }) {
                 return (
                     <div 
                         key={img}
+                        className={`kova-card-wrapper ${isCenter ? 'is-center' : ''}`}
                         onClick={() => {
                             if (isLeft) handlePrev();
                             else if (isRight) handleNext();
+                            else if (isCenter) {
+                                setFlippedStates(prev => ({ ...prev, [img]: !prev[img] }));
+                            }
                         }}
                         style={{
                             position: 'absolute',
                             width: 'var(--card-width)', // Dynamically scaled
-                            border: '1px solid rgba(255,255,255,0.15)',
-                            borderRadius: '12px',
-                            overflow: 'hidden',
-                            background: 'rgba(20, 20, 20, 0.6)',
-                            backdropFilter: 'blur(16px)',
-                            WebkitBackdropFilter: 'blur(16px)',
-                            boxShadow: isCenter ? '0 30px 60px -15px rgba(0, 0, 0, 0.8)' : '0 15px 30px -10px rgba(0, 0, 0, 0.5)',
-                            cursor: isCenter ? 'default' : 'pointer',
+                            cursor: 'pointer',
                             transition: 'all 0.5s cubic-bezier(0.16,1,0.3,1)',
                             transform: `translateX(${translateX}) scale(${scale})`,
                             opacity: isVisible ? opacity : 0,
@@ -282,39 +332,103 @@ function GraphicCycler({ images }: { images: number[] }) {
                             pointerEvents: isVisible ? 'auto' : 'none',
                         }}
                     >
-                        {/* macOS Window Header */}
-                        <div style={{ 
-                            height: '32px', 
-                            background: 'rgba(255, 255, 255, 0.05)', 
-                            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            padding: '0 12px', 
-                            gap: '8px' 
-                        }}>
-                            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FF5F56' }} />
-                            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FFBD2E' }} />
-                            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27C93F' }} />
+                        <div className={`kova-card-inner ${flippedStates[img] ? 'is-flipped' : ''}`}>
                             
-                            <span style={{ marginLeft: 'auto', color: 'rgba(255,255,255,0.3)', fontSize: '10px', letterSpacing: '1px', fontFamily: 'sans-serif' }}>
-                                GD_{img}.PNG
-                            </span>
-                        </div>
-                        
-                        {/* Content */}
-                        <div style={{ padding: '0', background: '#000' }}>
-                            <img 
-                                src={`/graphics/gd${img}.png`} 
-                                alt={`Graphic Design ${img}`} 
-                                style={{
-                                    width: '100%',
-                                    height: 'auto',
-                                    display: 'block',
-                                    objectFit: 'cover',
-                                    filter: isCenter ? 'none' : 'brightness(0.5)',
-                                    transition: 'filter 0.5s ease'
-                                }} 
-                            />
+                            {/* FRONT SIDE */}
+                            <div className="kova-card-front" style={{
+                                boxShadow: isCenter ? '0 30px 60px -15px rgba(0, 0, 0, 0.8)' : '0 15px 30px -10px rgba(0, 0, 0, 0.5)',
+                            }}>
+                                {/* macOS Window Header */}
+                                <div style={{ 
+                                    height: '32px', 
+                                    background: 'rgba(255, 255, 255, 0.05)', 
+                                    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    padding: '0 12px', 
+                                    gap: '8px' 
+                                }}>
+                                    <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FF5F56' }} />
+                                    <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FFBD2E' }} />
+                                    <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27C93F' }} />
+                                    
+                                    <span style={{ marginLeft: 'auto', color: 'rgba(255,255,255,0.3)', fontSize: '10px', letterSpacing: '1px', fontFamily: 'sans-serif' }}>
+                                        GD_{img}.PNG
+                                    </span>
+                                </div>
+                                
+                                {/* Content */}
+                                <div style={{ padding: '0', background: '#000' }}>
+                                    <img 
+                                        src={`/graphics/gd${img}.png`} 
+                                        alt={`Graphic Design ${img}`} 
+                                        style={{
+                                            width: '100%',
+                                            height: 'auto',
+                                            display: 'block',
+                                            objectFit: 'cover',
+                                            filter: isCenter ? 'var(--media-invert)' : 'var(--media-invert) brightness(0.5)',
+                                            transition: 'filter 0.5s ease'
+                                        }} 
+                                    />
+                                </div>
+                            </div>
+                            
+                            {/* BACK SIDE */}
+                            <div className="kova-card-back" style={{
+                                boxShadow: isCenter ? '0 30px 60px -15px rgba(0, 0, 0, 0.8)' : '0 15px 30px -10px rgba(0, 0, 0, 0.5)',
+                            }}>
+                                {/* macOS Window Header */}
+                                <div style={{ 
+                                    height: '32px', 
+                                    background: 'rgba(255, 255, 255, 0.05)', 
+                                    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    padding: '0 12px', 
+                                    gap: '8px',
+                                    flexShrink: 0
+                                }}>
+                                    <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FF5F56' }} />
+                                    <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FFBD2E' }} />
+                                    <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27C93F' }} />
+                                    
+                                    <span style={{ marginLeft: 'auto', color: 'rgba(255,255,255,0.3)', fontSize: '10px', letterSpacing: '1px', fontFamily: 'sans-serif' }}>
+                                        INFO_{img}.TXT
+                                    </span>
+                                </div>
+                                <div style={{ flex: 1, padding: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                                    <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem', letterSpacing: '0.2em', marginBottom: '10px', fontFamily: 'SubtitleFont, sans-serif' }}>DETAILS</span>
+                                    <h3 style={{ color: '#fff', fontSize: '1.5rem', margin: '0 0 20px 0', fontFamily: 'TitleFont, sans-serif' }}>GRAPHIC {img}</h3>
+                                    <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', lineHeight: '1.6', fontFamily: 'TextFont, sans-serif' }}>
+                                        Conceptual artwork showcasing brutalist and Y2K aesthetic combinations. Designed using Adobe Photoshop and Illustrator.
+                                    </p>
+                                    
+                                    <button 
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Prevents flipping the card back immediately
+                                            window.open(`https://instagram.com/kovagraphic`, '_blank');
+                                        }}
+                                        style={{
+                                            marginTop: '30px',
+                                            padding: '8px 16px',
+                                            background: '#fff',
+                                            border: 'none',
+                                            borderRadius: '4px',
+                                            color: '#000',
+                                            fontFamily: 'SubtitleFont, sans-serif',
+                                            fontSize: '0.8rem',
+                                            letterSpacing: '0.1em',
+                                            cursor: 'pointer',
+                                            textTransform: 'uppercase',
+                                            fontWeight: 'bold',
+                                        }}
+                                    >
+                                        View Full
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 );

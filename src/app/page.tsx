@@ -17,6 +17,7 @@ import CustomScrollbar from './components/CustomScrollbar';
 import LoadingScreen from './components/loadingscreen';
 import { Model } from './components/asset';
 import { Canvas } from '@react-three/fiber';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Page() {

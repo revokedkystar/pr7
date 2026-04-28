@@ -1,7 +1,15 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function BusinessPartnerships() {
+    const sectionRef = useRef<HTMLElement>(null);
+    const headerRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+
     const partners = [
         { id: 1, name: 'AWS', src: '/svg/aws.svg' },
         { id: 2, name: 'NHS', src: '/svg/nhs.svg' },
@@ -10,8 +18,49 @@ export default function BusinessPartnerships() {
         { id: 5, name: 'Google', src: '/svg/google.svg' }
     ];
 
+    // GSAP ScrollTrigger Animations
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            if (!sectionRef.current) return;
+
+            // Scrubbing for header typography
+            gsap.fromTo(headerRef.current,
+                { y: 60, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: 'top 90%',
+                        end: 'top 50%',
+                        scrub: 1,
+                    }
+                }
+            );
+
+            // Scrubbing for the main glass container window
+            gsap.fromTo(containerRef.current,
+                { y: 100, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: 'top 85%',
+                        end: 'top 40%',
+                        scrub: 1.5,
+                    }
+                }
+            );
+        }, sectionRef);
+
+        return () => ctx.revert();
+    }, []);
+
     return (
-        <section style={{
+        <section ref={sectionRef} style={{
             width: '100%',
             position: 'relative',
             zIndex: 10,
@@ -29,7 +78,7 @@ export default function BusinessPartnerships() {
             }}>
                 
                 {/* Header Typography */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+                <div ref={headerRef} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
                     <span style={{ 
                         color: '#fff', 
                         fontSize: '0.9rem', 
@@ -58,7 +107,7 @@ export default function BusinessPartnerships() {
                 </div>
 
                 {/* macOS Style Glass Container */}
-                <div style={{
+                <div ref={containerRef} style={{
                     width: '100%',
                     border: '1px solid rgba(255,255,255,0.15)',
                     borderRadius: '12px',
@@ -111,7 +160,7 @@ export default function BusinessPartnerships() {
                                 const img = e.currentTarget.querySelector('img');
                                 const label = e.currentTarget.querySelector('span');
                                 if (img) {
-                                    img.style.filter = 'grayscale(0%) opacity(1)';
+                                    img.style.filter = 'var(--media-invert) grayscale(0%) opacity(1)';
                                     img.style.transform = 'scale(1.05)';
                                 }
                                 if (label) {
@@ -123,7 +172,7 @@ export default function BusinessPartnerships() {
                                 const img = e.currentTarget.querySelector('img');
                                 const label = e.currentTarget.querySelector('span');
                                 if (img) {
-                                    img.style.filter = 'grayscale(100%) opacity(0.4)';
+                                    img.style.filter = 'var(--media-invert) grayscale(100%) opacity(0.4)';
                                     img.style.transform = 'scale(1)';
                                 }
                                 if (label) {
@@ -156,7 +205,7 @@ export default function BusinessPartnerships() {
                                         maxWidth: '100%', 
                                         maxHeight: '100%', 
                                         objectFit: 'contain',
-                                        filter: 'grayscale(100%) opacity(0.4)',
+                                        filter: 'var(--media-invert) grayscale(100%) opacity(0.4)',
                                         transition: 'all 0.4s cubic-bezier(0.16,1,0.3,1)',
                                     }} 
                                 />
