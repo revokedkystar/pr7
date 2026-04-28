@@ -2,6 +2,7 @@
 import './globals.css';
 import PlusGrid from './background/PlusGrid';
 import { useEffect } from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	useEffect(() => {
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				{/* PlusGrid background */}
 				<PlusGrid />
 				{children}
+				<SpeedInsights />
 			</body>
 		</html>
 	);
