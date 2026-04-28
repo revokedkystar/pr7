@@ -28,22 +28,36 @@ export default function Navbar({ className }: NavbarProps) {
         left: 0,
         width: '100vw',
         zIndex: 101,
-        height: '64px',
+        // Fluid height: 64px on mobile, scales up to 80px on large screens
+        height: 'clamp(64px, 8vw, 80px)',
         fontFamily: 'NavFont, Geist, system-ui, sans-serif',
-        backdropFilter: 'blur(35x)',
+        backdropFilter: 'blur(35px)', // Fixed typo from '35x'
         WebkitBackdropFilter: 'blur(35px)',
       }}
     >
-      {/* Nav Links (now left also josh was here) */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes spinOnce {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .logo-spin {
+          animation: spinOnce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+      `}} />
+      
+      {/* Nav Links (left side) */}
       <nav
         style={{
           position: 'absolute',
-          left: 48,
-          top: '50%',
+          // Fluid edge spacing: 16px on mobile, 48px on desktop
+          left: 'clamp(16px, 5vw, 48px)', 
+          top: '45%',
           transform: 'translateY(-50%)',
           display: 'flex',
-          gap: '34px',
-          fontSize: '1.5rem',
+          // Fluid gap between links
+          gap: 'clamp(16px, 3vw, 34px)',
+          // Fluid font size: 1rem (16px) on mobile, 1.5rem (24px) on desktop
+          fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
           color: '#fff',
           fontWeight: 600,
           letterSpacing: '0.08em',
@@ -54,26 +68,47 @@ export default function Navbar({ className }: NavbarProps) {
           fontFamily: 'NavFont, Geist, system-ui, sans-serif',
         }}
       >
-        <NavLink href="/studio">studio</NavLink>
-        <NavLink href="/about">cv</NavLink>
+        <NavLink href="https://linktr.ee/h4tfi3ld">LINKTREE</NavLink>
+        <NavLink href="/cv">CV</NavLink>
       </nav>
-      {/* Logo (now centered) */}
-      <div style={{ position: 'absolute', left: '50%', top: '55%', transform: 'translate(-50%, -50%)' }}>
+
+      {/* Logo (centered) */}
+      <div style={{ 
+          position: 'absolute', 
+          left: '50%', 
+          top: '45%', 
+          transform: 'translate(-50%, -50%)' 
+      }}>
         <a href="/" style={{ display: 'inline-block' }}>
           <img
             src="/images.png"
             alt="Logo"
             style={{
-              height: '48px',
-              width: '48px',
+              // Fluid logo sizing
+              height: 'clamp(32px, 5vw, 48px)',
+              width: 'clamp(32px, 5vw, 48px)',
               objectFit: 'contain',
               userSelect: 'none',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.classList.add('logo-spin');
+            }}
+            onAnimationEnd={(e) => {
+              e.currentTarget.classList.remove('logo-spin');
             }}
           />
         </a>
       </div>
-      {/* Contact Button */}
-      <div style={{ position: 'absolute', right: 48, top: '50%', transform: 'translateY(-50%)' }}>
+
+      {/* Contact Button (right side) */}
+      <div style={{ 
+          position: 'absolute', 
+          // Fluid edge spacing
+          right: 'clamp(16px, 5vw, 48px)', 
+          top: '45%', 
+          transform: 'translateY(-50%)' 
+      }}>
         <a
           href="/contact"
           style={{
@@ -81,16 +116,26 @@ export default function Navbar({ className }: NavbarProps) {
             color: '#111',
             border: 'none',
             borderRadius: '999px',
-            padding: '8px 24px',
+            // Fluid padding
+            padding: 'clamp(6px, 1vw, 8px) clamp(16px, 3vw, 24px)',
             fontWeight: 600,
             fontFamily: 'NavFont, Geist, system-ui, sans-serif',
-            fontSize: '1.1rem',
+            // Fluid font size
+            fontSize: 'clamp(0.85rem, 1.5vw, 1.1rem)',
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
             textDecoration: 'none',
             boxShadow: '0 2px 8px 0 rgba(0,0,0,0.10)',
-            transition: 'background 0.2s, color 0.2s, box-shadow 0.2s',
+            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
             cursor: 'pointer',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.12)';
+            e.currentTarget.style.boxShadow = '0 8px 24px 0 rgba(0,0,0,0.25)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow = '0 2px 8px 0 rgba(0,0,0,0.10)';
           }}
         >
           contact
@@ -99,4 +144,4 @@ export default function Navbar({ className }: NavbarProps) {
     </div>
   );
 }
-//hello!"!!!"joshua was here
+// hello!"!!!"joshua is here!!!

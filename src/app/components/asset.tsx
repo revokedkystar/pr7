@@ -3,6 +3,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import { useGLTF, OrthographicCamera, Html } from '@react-three/drei'
 import { Mesh } from 'three';
 import { useFrame } from '@react-three/fiber';
+import { useVideoTexture } from '@react-three/drei';
 
 export function Model(props: any) {
   const groupRef = useRef<any>(null);
@@ -10,6 +11,10 @@ export function Model(props: any) {
 
   // Entrance animation state
   const [entrance, setEntrance] = useState(false);
+  // Animation state for vertical position only
+  const [animY, setAnimY] = useState(-10);
+  const animationStart = useRef<number | null>(null);
+
   // Phase 2 reveal state
   useEffect(() => {
     if (props.onPhase2) {
@@ -22,13 +27,56 @@ export function Model(props: any) {
   useEffect(() => {
     if (props.onReady) props.onReady();
     setTimeout(() => setEntrance(true), 10); // trigger entrance after mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Scrub state
-  const [scrubAngle, setScrubAngle] = useState(Math.PI);
+  const scrubAngle = useRef(Math.PI);
+  const targetAngle = useRef(Math.PI);
   const isDragging = useRef(false);
   const lastX = useRef(0);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      lastScrollY.current = window.scrollY;
+      const handleScroll = () => {
+        const scrollY = window.scrollY;
+        const deltaY = scrollY - lastScrollY.current;
+        lastScrollY.current = scrollY;
+        
+        if (!isDragging.current) {
+          // Add scroll delta to target angle (scrubbing based scrolling)
+          targetAngle.current += deltaY * 0.005;
+        }
+      };
+      
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
+
+  // Animate from bottom up and naturally spin slowly
+  useFrame((state) => {
+    if (entrance) {
+      if (animationStart.current === null) animationStart.current = state.clock.getElapsedTime();
+      const elapsed = state.clock.getElapsedTime() - animationStart.current;
+      // Animate y from -10 to 0 over 1.2s
+      const duration = 1.2;
+      const t = Math.min(elapsed / duration, 1);
+      const ease = t < 1 ? 1 - Math.pow(1 - t, 3) : 1; // easeOutCubic
+      
+      if (t < 1) {
+        setAnimY(-10 + 10 * ease);
+      }
+      
+      // Smoothly interpolate current angle towards target angle for smooth scrubbing
+      scrubAngle.current += (targetAngle.current - scrubAngle.current) * 0.1;
+      
+      if (groupRef.current) {
+        groupRef.current.rotation.y = scrubAngle.current;
+      }
+    }
+  });
 
   // Mouse/touch event handlers
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -41,38 +89,50 @@ export function Model(props: any) {
     if (!isDragging.current) return;
     const deltaX = e.clientX - lastX.current;
     lastX.current = e.clientX;
-    setScrubAngle((prev) => prev + deltaX * 0.01);
+    targetAngle.current += deltaX * 0.01;
   };
   const handlePointerUp = () => {
     isDragging.current = false;
     window.removeEventListener('pointerup', handlePointerUp);
     window.removeEventListener('pointermove', handlePointerMove);
   };
-
-  useFrame(() => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = scrubAngle;
-    }
+  const videoTexture = useVideoTexture("/p7even.mp4", {
+    muted: true,
+    loop: true,
+    start: true
   });
 
-  // Animated style for entrance
+
+  // Remove old useFrame for scrubAngle, integrate with animation
+  useEffect(() => {
+    if (groupRef.current && !entrance) {
+      groupRef.current.position.y = -10;
+      groupRef.current.rotation.y = scrubAngle.current;
+    }
+  }, [entrance]);
+
+  // Animated style for entrance: fade in from bottom
   const style = {
-    transition: 'transform 1s cubic-bezier(0.16,1,0.3,1), filter 1s cubic-bezier(0.16,1,0.3,1), opacity 1s cubic-bezier(0.16,1,0.3,1)',
-    transform: entrance ? 'scale(1)' : 'scale(0.9)',
+    transition: 'transform 1.2s cubic-bezier(0.16,1,0.3,1), filter 1.2s cubic-bezier(0.16,1,0.3,1), opacity 1.2s cubic-bezier(0.16,1,0.3,1)',
+    transform: entrance
+      ? 'translateY(0) scale(1)'
+      : 'translateY(80px) scale(0.9)',
     filter: entrance ? 'blur(0)' : 'blur(5px)',
-    opacity: entrance ? 1 : 0,
+    opacity: entrance ? 0.7 : 0,
     willChange: 'transform, filter, opacity',
   };
 
   return (
     <group {...props} dispose={null}>
-      <group scale={0.003}>
+      <group scale={0.0043}>
         <group
           ref={groupRef}
-          position={[0, 0, 0]}
-          rotation={[0, scrubAngle, 0]}
+          position={[0, animY, 0]}
+          rotation={[0, Math.PI, 0]}
           scale={0.225}
           onPointerDown={handlePointerDown}
+          // @ts-ignore
+          style={style}
         >
           {/* Removed the Html overlay that was covering the model */}
           <group position={[-1.273, -436.608, -17.856]} scale={[1, 1, 1.002]}>
@@ -105,57 +165,16 @@ export function Model(props: any) {
               rotation={[-Math.PI, 0, -Math.PI]}
               scale={2.069}
             />
-            {/* Screen */}
+
             <mesh
-              castShadow={false}
-              receiveShadow={false}
               geometry={(nodes.screen_1 as Mesh).geometry}
               position={[669.198, 44.158, 0.656]}
               rotation={[-Math.PI, 0, -Math.PI]}
               scale={[0.899, 0.9, 0.9]}
             >
-              <meshStandardMaterial color="#000" metalness={0.2} roughness={0.2} />
-              {/* Overlay a working screen UI */}
-              <Html
-                center
-                transform
-                style={{ width: '300px', height: '180px', pointerEvents: 'none' }}
-              >
-                <div style={{
-                  width: '100%',
-                  height: '100%',
-                  background: 'linear-gradient(180deg, #eaeaea 60%, #d0d0d0 100%)',
-                  borderRadius: '8px',
-                  boxShadow: '0 2px 8px #0002',
-                  overflow: 'hidden',
-                  fontFamily: 'sans-serif',
-                  fontSize: '14px',
-                  color: '#222'
-                }}>
-                  <div style={{
-                    background: '#f5f5f5',
-                    padding: '6px 12px',
-                    borderBottom: '1px solid #ccc',
-                    display: 'flex',
-                    alignItems: 'center'
-                  }}>
-                    <span style={{ width: 8, height: 8, background: '#ff5f56', borderRadius: '50%', display: 'inline-block', marginRight: 4 }}></span>
-                    <span style={{ width: 8, height: 8, background: '#ffbd2e', borderRadius: '50%', display: 'inline-block', marginRight: 4 }}></span>
-                    <span style={{ width: 8, height: 8, background: '#27c93f', borderRadius: '50%', display: 'inline-block', marginRight: 8 }}></span>
-                    <span style={{ flex: 1, color: '#888', fontSize: 12 }}>https://workspace.local</span>
-                  </div>
-                  <div style={{ padding: '16px' }}>
-                    <h3 style={{ margin: 0, fontSize: 18, color: '#222' }}>Welcome!</h3>
-                    <p style={{ margin: '8px 0 0 0', color: '#444' }}>This is your working laptop screen.</p>
-                    <ul style={{ margin: '12px 0 0 0', padding: 0, listStyle: 'none', color: '#333' }}>
-                      <li>• Code Editor</li>
-                      <li>• Browser</li>
-                      <li>• Terminal</li>
-                    </ul>
-                  </div>
-                </div>
-              </Html>
+              <meshBasicMaterial map={videoTexture} toneMapped={false} />
             </mesh>
+            
             <mesh
               castShadow={false}
               receiveShadow={false}

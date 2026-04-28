@@ -1,21 +1,98 @@
-/* ScrollingTicker styles */
-.scrolling-ticker {
-    position: fixed;
-    bottom: -15;
-    left: 0;
-    width: 100vw;
-    padding: 8px 0;
-    z-index: 400;
-    overflow: hidden;
-    white-space: nowrap;
-    font-family: 'SubtitleFont', system-ui, sans-serif;
-    font-size: 80px;
-    letter-spacing: 0.2em;
-    color: rgba(255,255,255,0.5);
+/* Glassmorphic pill background */
+.glass-pill-bg {
+    min-width: 320px;
+    min-height: 220px;
+    padding: 32px 48px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.13);
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.25), 0 2px 12px 0 rgba(0,0,0,0.15);
+    backdrop-filter: blur(18px) saturate(1.5);
+    -webkit-backdrop-filter: blur(18px) saturate(1.5);
+    border: 1.5px solid rgba(255,255,255,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+html, body {
+    overflow-x: hidden;
+}
+/* Popout effect for bottom-left image */
+.popout-hover-img {
+    transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s cubic-bezier(0.16,1,0.3,1);
+}
+.popout-hover-img:hover {
+    transform: scale(1.08) translateY(-8px);
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.35), 0 2px 12px 0 rgba(0,0,0,0.25);
+    z-index: 200;
 }
 .ticker-track {
     display: inline-block;
     animation: marquee 30s linear infinite;
+}
+.ticker-glitch {
+    display: inline-block;
+    position: relative;
+    animation: neon-glitch 2.2s infinite linear alternate;
+}
+.ticker-glitch::before,
+.ticker-glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    color: #fff;
+    opacity: 0.7;
+    pointer-events: none;
+}
+.ticker-glitch::before {
+    text-shadow: 2px 0 #ff00c8, 0 0 8px #ff00c8;
+    animation: glitchTop 2.2s infinite linear alternate;
+    top: -2px;
+    clip-path: inset(0 0 60% 0);
+}
+.ticker-glitch::after {
+    text-shadow: -2px 0 #00fff7, 0 0 8px #00fff7;
+    animation: glitchBot 2.2s infinite linear alternate;
+    top: 2px;
+    clip-path: inset(60% 0 0 0);
+}
+@keyframes neon-glitch {
+    0%, 100% { filter: brightness(1.1) contrast(1.2); }
+    10% { filter: brightness(1.5) contrast(1.5); }
+    20% { filter: brightness(0.8) contrast(1.8); }
+    30% { filter: brightness(1.2) contrast(1.2); }
+    40% { filter: brightness(1.7) contrast(1.7); }
+    50% { filter: brightness(1.1) contrast(1.2); }
+    60% { filter: brightness(1.5) contrast(1.5); }
+    70% { filter: brightness(0.8) contrast(1.8); }
+    80% { filter: brightness(1.2) contrast(1.2); }
+    90% { filter: brightness(1.7) contrast(1.7); }
+}
+@keyframes glitchTop {
+    0%, 100% { transform: translate(0, 0); opacity: 0.7; }
+    10% { transform: translate(-2px, -2px); opacity: 1; }
+    20% { transform: translate(2px, 2px); opacity: 0.5; }
+    30% { transform: translate(-1px, 1px); opacity: 0.8; }
+    40% { transform: translate(1px, -1px); opacity: 0.6; }
+    50% { transform: translate(0, 0); opacity: 0.7; }
+    60% { transform: translate(-2px, 2px); opacity: 1; }
+    70% { transform: translate(2px, -2px); opacity: 0.5; }
+    80% { transform: translate(-1px, -1px); opacity: 0.8; }
+    90% { transform: translate(1px, 1px); opacity: 0.6; }
+}
+@keyframes glitchBot {
+    0%, 100% { transform: translate(0, 0); opacity: 0.7; }
+    10% { transform: translate(2px, 2px); opacity: 1; }
+    20% { transform: translate(-2px, -2px); opacity: 0.5; }
+    30% { transform: translate(1px, -1px); opacity: 0.8; }
+    40% { transform: translate(-1px, 1px); opacity: 0.6; }
+    50% { transform: translate(0, 0); opacity: 0.7; }
+    60% { transform: translate(2px, -2px); opacity: 1; }
+    70% { transform: translate(-2px, 2px); opacity: 0.5; }
+    80% { transform: translate(1px, 1px); opacity: 0.8; }
+    90% { transform: translate(-1px, -1px); opacity: 0.6; }
 }
 @keyframes marquee {
     from { transform: translateX(0); }
@@ -26,7 +103,7 @@
     font-family: 'TitleFont', system-ui, sans-serif;
     font-weight: 700;
     font-size: 2rem;
-    color: #fff;
+    color: #ffffff;
     letter-spacing: 0.12em;
     white-space: nowrap;
     animation: slideText 8s linear infinite;
@@ -43,7 +120,6 @@ body {
     margin: 0;
     font-family: 'Geist', system-ui, sans-serif;
     color: #000;
-    overflow: hidden;
 }
 
 .plus-grid-canvas {
@@ -103,5 +179,17 @@ body {
 @font-face {
     font-family: 'SubtitleFont';
     src: url('./fonts/subtitlefont.woff2') format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BaseFont';
+    src: url('./fonts/basefont.woff2') format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'TextFont';
+    src: url('./fonts/textfont.woff2') format('woff2');
     font-display: swap;
 }

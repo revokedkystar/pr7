@@ -13,9 +13,9 @@ export default function PlusGrid() {
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
-  const size = 450; // grid spacing (increased for bigger boxes)
+  const size = 460; // grid spacing (increased for bigger boxes)
   const plusSize = 8; // plus sign size
-  const color = '#333';
+  const color = '#929292';
   const { width, height } = dimensions;
   const cols = Math.ceil(width / size);
   const rows = Math.ceil(height / size);
@@ -27,7 +27,21 @@ export default function PlusGrid() {
   const offsetRows = Math.floor(rows / 2);
 
   return (
-    <svg className="plus-grid-canvas" width={width} height={height} style={{ position: 'fixed', top: 0, left: 0, zIndex: 0, pointerEvents: 'none', background: '#000' }}>
+    <svg
+      className="plus-grid-canvas"
+      width={width}
+      height={height}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 0,
+        pointerEvents: 'none',
+        background: '#000',
+      }}
+    >
       {/* Centered Vertical lines */}
       {Array.from({ length: cols }).map((_, col) => (
         <line

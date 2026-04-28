@@ -1,37 +1,85 @@
 "use client";
-import './globals.css';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from './navbar/Navbar';
+import PlusGrid from './background/PlusGrid';
+import Certificates from './components/Certificates';
+import BusinessPartnerships from './components/BusinessPartnerships';
+import Terminal from './components/terminal';
+import Stack from './components/stack';
+import KovaGraphic from './components/KovaGraphic';
+import MoreGraphics from './components/MoreGraphics';
+import About from './components/about';
+import ScrollingText from './components/scrollingtext';
+import Footer from './components/Footer';
+import CustomScrollbar from './components/CustomScrollbar';
+import LoadingScreen from './components/loadingscreen';
 import { Model } from './components/asset';
-import { AnnotationLines } from './components/AnnotationLines';
 import { Canvas } from '@react-three/fiber';
-import ScrollingTicker from './components/ScrollingTicker';
-import TechnicalMarquee from './components/TechnicalMarquee';
-// Removed ProfileCard import
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Page() {
     const [isModelReady, setIsModelReady] = useState(false);
     const [phase2, setPhase2] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleModelReady = useCallback(() => setIsModelReady(true), []);
     const handlePhase2 = useCallback(() => setPhase2(true), []);
+    const handleLoadingComplete = useCallback(() => setIsLoading(false), []);
 
-    // Fade-in state for GIFs and title
     const [fadeIn, setFadeIn] = useState(false);
     useEffect(() => {
-        if (phase2) {
-            setTimeout(() => setFadeIn(true), 100);
+        if (phase2 && !isLoading) {
+            const timeout = setTimeout(() => setFadeIn(true), 100);
+            return () => clearTimeout(timeout);
         }
-    }, [phase2]);
 
-    const deadsecRef = useRef<HTMLDivElement>(null);
-    const dunkRef = useRef<HTMLDivElement>(null);
+        setFadeIn(false);
+    }, [isLoading, phase2]);
 
+    // Ref for scroll-to-explore text
+    const scrollTextRef = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+        if (!scrollTextRef.current) return;
+        gsap.fromTo(
+            scrollTextRef.current,
+            { opacity: 0, y: 60 },
+            {
+                opacity: 1,
+                y: 0,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: scrollTextRef.current,
+                    start: 'top 90%', // when top of element hits 90% of viewport
+                    end: 'top 60%',
+                    scrub: true,
+                },
+            }
+        );
+        return () => {
+            ScrollTrigger.getAll().forEach(t => t.kill());
+        };
+    }, []);
 
     return (
-        <>
-            {/* Navbar Fade-In from Top */}
+        <div style={{
+            width: '100vw',
+            minHeight: '100vh',
+            overflowX: 'hidden',
+            position: 'relative',
+            background: '#000',
+        }}>
+            {/* Loading screen overlay */}
+            {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
+
+            {/* Custom Scrollbar Styles */}
+            <CustomScrollbar />
+            
+            {/* PlusGrid background */}
+            <PlusGrid />
+            {/* Navbar (fixed) */}
             <div style={{
                 overflow: 'hidden',
                 position: 'fixed', top: 0, left: 0, width: '100vw', zIndex: 101,
@@ -48,140 +96,112 @@ export default function Page() {
             </div>
 
             {/* Main scrollable content */}
-            <div style={{ width: '100vw', maxWidth: '100%', marginTop: 64, opacity: isModelReady ? 1 : 0, transition: 'opacity 1s' }}>
-                <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
-                    <Canvas camera={{ position: [0, 0, 2], fov: 60 }} style={{ width: '100vw', height: '100vh' }}>
+            <main style={{ width: '100%', marginTop: 20 }}>
+                {/* Title Section */}
+                <section style={{
+                    width: '100%',
+                    maxWidth: 1200,
+                    margin: '0 auto',
+                    padding: 'clamp(60px, 15vh, 100px) 20px 0 20px',
+                    fontFamily: 'TitleFont, system-ui, sans-serif',
+                    color: '#fff',
+                    letterSpacing: '0.02em',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '4px',
+                    opacity: fadeIn ? 1 : 0,
+                    transform: fadeIn ? 'translateY(0)' : 'translateY(-40px)',
+                    transition: 'opacity 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s, transform 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                }}>
+                    <span style={{ fontWeight: 700, fontSize: 'clamp(2.5rem, 8vw, 4.2rem)', lineHeight: '1', textAlign: 'center', width: '100%' }}>
+                        home of,
+                    </span>
+                    <div style={{ fontFamily: 'SubtitleFont, system-ui, sans-serif', fontWeight: 700, fontSize: 'clamp(2.5rem, 8vw, 4.2rem)', lineHeight: '1', textAlign: 'center', width: '100%' }}>
+                        <TextCycle texts={["PROJECT 7EVEN*", "@H4TI3LD", "KOVA GRAPHIC"]} />
+                    </div>
+                </section>
+
+                <section style={{
+                    width: '100vw',
+                    height: '60vh',
+                    margin: '-50px 0 0 0',
+                    zIndex: 5,
+                    opacity: isModelReady ? 1 : 0,
+                    transition: 'opacity 1s',
+                    pointerEvents: 'none',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                    <Canvas camera={{ position: [0, 0, 2], fov: 60 }} style={{ pointerEvents: 'auto', width: '100%', height: '100%' }}>
                         <ambientLight intensity={0.7} />
                         <directionalLight position={[2, 2, 2]} intensity={0.8} />
                         <Model onReady={handleModelReady} onPhase2={handlePhase2} />
                     </Canvas>
-                    {/* Drag to Spin Tag - fixed above model */}
-                    <div style={{ position: 'fixed', left: '50%', top: '32%', transform: 'translate(-50%, -50%)', zIndex: 110, background: 'rgba(0,0,0,0.7)', color: '#fff', padding: '8px 18px', borderRadius: '12px', fontSize: '1rem', fontFamily: 'BaseFont, system-ui, sans-serif', boxShadow: '0 2px 8px #0003', pointerEvents: 'none', letterSpacing: '0.08em' }}>
-                        drag to spin
-                    </div>
+                </section>
+
+                {/* Scroll Indicator */}
+                <div style={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: '20px',
+                    marginBottom: '40px',
+                    opacity: isModelReady ? 0.7 : 0,
+                    transition: 'opacity 1s 0.5s',
+                    color: '#fff',
+                    fontFamily: 'SubtitleFont, system-ui, sans-serif',
+                    fontSize: '0.9rem',
+                    letterSpacing: '0.2em',
+                    textTransform: 'uppercase',
+                    zIndex: 10,
+                    position: 'relative',
+                }}>
+                    <span style={{ marginBottom: '8px' }}>please scroll to continue</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'bounce 2s infinite' }}>
+                        <path d="M12 5v14M19 12l-7 7-7-7"/>
+                    </svg>
+                    <style>{`
+                        @keyframes bounce {
+                            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+                            40% { transform: translateY(-10px); }
+                            60% { transform: translateY(-5px); }
+                        }
+                    `}</style>
                 </div>
 
-            <AnnotationLines deadsecRef={deadsecRef} dunkRef={dunkRef} fadeIn={fadeIn} />
+            {/* About Me Section */}
+            <About />
 
-            {/* Top left Title Section (now scrolls with content) */}
-            <div style={{
-                marginTop: 64,
-                marginLeft: 32,
-                fontFamily: 'TitleFont, system-ui, sans-serif',
-                color: '#fff',
-                letterSpacing: '0.12em',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '4px',
-                opacity: fadeIn ? 1 : 0,
-                transform: fadeIn ? 'translateY(0)' : 'translateY(-40px)',
-                transition: 'opacity 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s, transform 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s',
-            }}>
-                <span style={{ fontWeight: 700, fontSize: '4.2rem', lineHeight: '1' }}>
-                    HOME OF,
-                </span>
-                <div style={{ fontWeight: 700, fontSize: '4.2rem', lineHeight: '1' }}>
-                    <TextCycle texts={["PROJECT 7EVEN*", "PROGRAMMING", "GRAPHIC ART"]} />
-                </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 32 }}>
-                {/* Deadsec section */}
-                <div>
-                    <div style={{
-                        color: '#fff',
-                        fontFamily: 'NavFont, system-ui, sans-serif',
-                        fontSize: '0.95rem',
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                    }}>
-                        welcome new friend!
-                    </div>
-                    <div style={{
-                        color: 'rgba(255,255,255,0.7)',
-                        fontFamily: 'TitleFont, system-ui, sans-serif',
-                        fontSize: '0.8rem',
-                        maxWidth: 280,
-                        lineHeight: 1.4,
-                    }}>
-                        thank you for viewing my portfolio, i hope you find everything you need to know about me and my work through this visual experiance.
-                    </div>
-                    <div ref={deadsecRef} style={{
-                        background: 'rgba(0,0,0,0.7)',
-                        border: '2px solid #fff',
-                        borderRadius: 0,
-                        boxShadow: '0 4px 24px #000a',
-                        padding: 0,
-                        display: 'inline-block',
-                        position: 'relative',
-                        pointerEvents: 'auto',
-                        overflow: 'hidden',
-                    }}>
-                        <div style={{
-                            position: 'absolute', top: 4, right: 8, color: '#fff', fontWeight: 700, fontSize: 18, cursor: 'pointer', userSelect: 'none',
-                            textShadow: '0 1px 4px #000a',
-                        }} title="Close">×</div>
-                        <img src="/deadsec.gif" alt="Deadsec GIF" style={{ display: 'block', borderRadius: 0, maxWidth: 300, maxHeight: 200 }} />
-                    </div>
-                </div>
-                {/* Slam Dunk section */}
-                <div>
-                    <div ref={dunkRef} style={{
-                        background: 'rgba(0,0,0,0.7)',
-                        border: '2px solid #fff',
-                        borderRadius: 0,
-                        boxShadow: '0 4px 24px #000a',
-                        padding: 0,
-                        display: 'inline-block',
-                        position: 'relative',
-                        pointerEvents: 'auto',
-                        overflow: 'hidden',
-                    }}>
-                        <div style={{
-                            position: 'absolute', top: 4, right: 8, color: '#fff', fontWeight: 700, fontSize: 18, cursor: 'pointer', userSelect: 'none',
-                            textShadow: '0 1px 4px #000a',
-                        }} title="Close">×</div>
-                        <img src="/dunk.gif" alt="Dunk GIF" style={{ display: 'block', borderRadius: 0, maxWidth: 400, maxHeight: 260 }} />
-                    </div>
-                    <div style={{
-                        color: '#fff',
-                        fontFamily: 'NavFont, system-ui, sans-serif',
-                        fontSize: '0.95rem',
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                    }}>
-                        why a slam dunk?
-                    </div>
-                    <div style={{
-                        color: 'rgba(255,255,255,0.7)',
-                        fontFamily: 'TitleFont, system-ui, sans-serif',
-                        fontSize: '0.8rem',
-                        maxWidth: 280,
-                        lineHeight: 1.4,
-                        textAlign: 'right',
-                    }}>
-                        yeah its a bit random, but im slamming dunks so hard i had to visualize it. in all seriousness, i have played ball all my life.
-                    </div>
-                </div>
-            </div>
-            {/* Scrolling Ticker as section separator under GIFs */}
-            <div style={{ width: '100%', margin: '48px 0 0 0', opacity: fadeIn ? 1 : 0, transition: 'opacity 1s ease 1s' }}>
-                <ScrollingTicker />
-            </div>
-            {/* Description under the keep scrolling section */}
-            <div style={{
-                width: '100%',
-                textAlign: 'center',
-                color: '#fff',
-                fontFamily: 'TitleFont, system-ui, sans-serif',
-                fontSize: '1.2rem',
-                margin: '24px 0 0 0',
-                opacity: fadeIn ? 1 : 0,
-                transition: 'opacity 1s ease 1.2s',
-            }}>
-                Welcome to the next section! Here you'll find more about my work, skills, and creative journey.
-            </div>
+            {/* Graphics Gallery Section */}
+            <KovaGraphic />
+
+            {/* Rest of Graphics */}
+            <MoreGraphics />
+
+            {/* Terminal Section */}
+            <Terminal />
+
+            {/* Stack Section */}
+            <Stack />
+
+                        {/* Business Partnerships Section */}
+            <BusinessPartnerships />
+
+            {/* Certificates Section */}
+            <Certificates />
+
+            {/* Scrolling Text Section */}
+            <ScrollingText />
+
+            {/* Footer Section */}
+            <Footer />
+            </main>
         </div>
-    </>
     );
 }
 
@@ -202,23 +222,20 @@ function TextCycle({ texts }: { texts: string[] }) {
     }, [texts.length]);
 
     return (
-        <span
-            style={{
-                fontFamily: 'SubtitleFont, TitleFont, system-ui, sans-serif',
-                display: 'inline-block',
-                overflow: 'hidden',
-                verticalAlign: 'bottom',
-            }}
-        >
+        <span style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom', minWidth: 'clamp(140px, 20vw, 220px)' }}>
             <span
                 style={{
                     display: 'inline-block',
-                    clipPath: isRevealing ? 'inset(0 0 0 0)' : 'inset(0 0 0 100%)',
-                    transition: 'clip-path 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                }}
-            >
+                    opacity: isRevealing ? 1 : 0,
+                    transition: 'opacity 0.4s',
+                    fontWeight: 700,
+                    fontSize: 'clamp(2.5rem, 8vw, 4.2rem)',
+                    color: '#fff',
+                    letterSpacing: '0em',
+                    }}
+                    >
                 {texts[index]}
             </span>
         </span>
-    );
-}
+        );
+    }

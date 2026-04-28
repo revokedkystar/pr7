@@ -22,6 +22,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 	return (
 		<html lang="en">
+			<head>
+				<link rel="icon" href="/images.png" />
+			</head>
 			<body className="bg-black text-white">
 				{/* PlusGrid background */}
 				<PlusGrid />
