@@ -5,8 +5,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from './navbar/Navbar';
 import PlusGrid from './background/PlusGrid';
 import Certificates from './components/Certificates';
-import BusinessPartnerships from './components/BusinessPartnerships';
 import Terminal from './components/terminal';
+import WebShowcase from './components/webshowcase';
 import Stack from './components/stack';
 import KovaGraphic from './components/KovaGraphic';
 import MoreGraphics from './components/MoreGraphics';
@@ -187,11 +187,11 @@ export default function Page() {
             {/* Terminal Section */}
             <Terminal />
 
+            {/* Web Showcase Section */}
+            <WebShowcase />
+
             {/* Stack Section */}
             <Stack />
-
-                        {/* Business Partnerships Section */}
-            <BusinessPartnerships />
 
             {/* Certificates Section */}
             <Certificates />

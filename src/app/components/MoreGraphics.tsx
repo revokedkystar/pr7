@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -8,6 +9,11 @@ gsap.registerPlugin(ScrollTrigger);
 export default function MoreGraphics() {
     const gridRef = useRef<HTMLDivElement>(null);
     const [expandedItem, setExpandedItem] = useState<{id: string, src: string, label: string} | null>(null);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // Randomized array mixing GIFs and PNGs to create a dynamic bento layout
     const galleryItems = [
@@ -254,7 +260,7 @@ export default function MoreGraphics() {
             </div>
 
             {/* Expanded Modal Overlay */}
-            {expandedItem && (
+            {mounted && expandedItem && createPortal(
                 <div 
                     className="modal-enter"
                     onClick={() => setExpandedItem(null)}
@@ -329,7 +335,8 @@ export default function MoreGraphics() {
                             />
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </section>
     );

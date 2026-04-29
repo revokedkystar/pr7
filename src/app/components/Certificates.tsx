@@ -43,7 +43,7 @@ export default function Certificates() {
                             textTransform: 'uppercase',
                             opacity: 0.5 
                         }}>
-                            — CERTIFICATES / 04
+                            — CERTIFICATES / 08
                         </span>
                         <h2 style={{
                             color: '#fff',

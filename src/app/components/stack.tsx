@@ -133,7 +133,7 @@ export default function Capabilities() {
 
                 @keyframes spin { 100% { transform: rotate(360deg); } }
                 @keyframes pulseRing { 
-                    0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); } 
+                    0% { box-shadow: 0 0 0 0 rgb(255, 255, 255); } 
                     70% { box-shadow: 0 0 0 20px rgba(255, 255, 255, 0); } 
                     100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } 
                 }
@@ -141,13 +141,13 @@ export default function Capabilities() {
 
             <div ref={titleRef} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '40px', zIndex: 1 }}>
                 <span style={{ 
-                    color: 'rgba(255,255,255,0.4)', 
+                    color: 'rgb(255,255,255,0.4)', 
                     fontSize: '0.8rem', 
                     fontFamily: 'TitleFont, sans-serif',
                     letterSpacing: '0.3em', 
                     marginBottom: '15px'
                 }}>
-                    — FULL_STACK / 06
+                    — FULL_STACK / 07
                 </span>
                 
                 <h2 style={{
@@ -183,7 +183,7 @@ export default function Capabilities() {
                     width: '80%',
                     height: '80%',
                     borderRadius: '50%',
-                    border: '1px dashed rgba(255, 255, 255, 0.15)',
+                    border: '1px dashed rgb(255, 255, 255)',
                     pointerEvents: 'none',
                     animation: 'spin 60s linear infinite',
                 }} />
