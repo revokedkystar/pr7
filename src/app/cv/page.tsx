@@ -14,7 +14,7 @@ export default function DigitalCV() {
             { platform: 'LinkedIn', handle: '@Joshua Hatfield', link: '#' },
             { platform: 'GitHub', handle: '@revokedkystar', link: '#' },
             { platform: 'Email', handle: 'hatfij08@gmail.com', link: 'mailto:hatfij08@gmail.com' },
-            { platform: 'Web', handle: 'project7even.site', link: 'https://project7even.site' },
+            { platform: 'Web', handle: 'pro7even.vercel.app', link: 'https://pro7even.vercel.app' },
         ],
         experience: [
             {

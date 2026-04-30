@@ -14,6 +14,7 @@ import About from './components/about';
 import ScrollingText from './components/scrollingtext';
 import Footer from './components/Footer';
 import CustomScrollbar from './components/CustomScrollbar';
+import CustomCursor from './components/CustomCursor';
 import LoadingScreen from './components/loadingscreen';
 import { Model } from './components/asset';
 import { Canvas } from '@react-three/fiber';
@@ -72,6 +73,7 @@ export default function Page() {
             position: 'relative',
             background: '#000',
         }}>
+            <CustomCursor />
             {/* Loading screen overlay */}
             {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
 
@@ -82,15 +84,12 @@ export default function Page() {
             <PlusGrid />
             {/* Navbar (fixed) */}
             <div style={{
-                overflow: 'hidden',
                 position: 'fixed', top: 0, left: 0, width: '100vw', zIndex: 101,
-                height: '64px',
             }}>
                 <div style={{
                     transform: phase2 ? 'translateY(0)' : 'translateY(-100%)',
                     opacity: phase2 ? 1 : 0,
                     transition: 'transform 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s, opacity 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s',
-                    height: '64px',
                 }}>
                     <Navbar />
                 </div>

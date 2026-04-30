@@ -14,15 +14,15 @@ export default function LiveArchives() {
         { 
             id: '01',
             title: "ARTISAN CATERING",
-            url: "https://your-kova-site.com",
-            image: "/images/kova-preview.jpg", // Replace with your actual image path
+            url: "https://artisan-web-one.vercel.app",
+            image: "preview2.png", 
             desc: "The primary design portfolio featuring a high-contrast brutalist grid and technical typography."
         },
         { 
             id: '02',
             title: "BTEC UNIT TRACKER",
             url: "https://unit-pal-progress.lovable.app",
-            image: "preview1.png",   // Replace with your actual image path
+            image: "preview1.png",  
             desc: "A digital architecture manifesto built with glassmorphism and ambient lighting effects."
         }
     ];
@@ -62,7 +62,8 @@ export default function LiveArchives() {
             justifyContent: 'center',
             position: 'relative',
             zIndex: 10,
-            padding: '100px 20px',
+            // Fluid padding: shrinks on mobile, expands on desktop
+            padding: 'clamp(60px, 10vh, 120px) clamp(16px, 5vw, 40px)',
             overflow: 'hidden',
         }}>
             <style dangerouslySetInnerHTML={{__html: `
@@ -75,21 +76,29 @@ export default function LiveArchives() {
                 @media (max-width: 1024px) {
                     .archive-grid {
                         grid-template-columns: 1fr !important;
-                        gap: 60px !important;
+                        gap: clamp(40px, 8vw, 60px) !important;
                     }
                     .text-column {
                         align-items: center !important;
                         text-align: center !important;
+                    }
+                    .desc-text {
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+                    .controls-container {
+                        justify-content: center;
                     }
                 }
             `}} />
 
             <div ref={containerRef} className="archive-grid" style={{
                 width: '100%',
-                maxWidth: '1500px', // Expanded for a massive window presence
+                maxWidth: '1500px',
                 display: 'grid',
-                gridTemplateColumns: '1.6fr 1fr', // Shifts visual weight heavily to the window
-                gap: '80px',
+                gridTemplateColumns: '1.6fr 1fr', 
+                // Fluid gap between window and text
+                gap: 'clamp(40px, 6vw, 80px)',
                 alignItems: 'center',
                 zIndex: 1,
             }}>
@@ -115,24 +124,24 @@ export default function LiveArchives() {
                 >
                     {/* macOS Title Bar */}
                     <div style={{ 
-                        height: '44px', 
+                        height: 'clamp(36px, 4vw, 44px)', // Fluid height
                         background: 'rgba(255, 255, 255, 0.03)', 
                         borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
                         display: 'flex', 
                         alignItems: 'center', 
-                        padding: '0 16px', 
+                        padding: '0 clamp(12px, 2vw, 16px)', 
                     }}>
-                        <div style={{ display: 'flex', gap: '8px', width: '80px' }}>
-                            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FF5F56', boxShadow: 'inset 0 0 4px rgba(0,0,0,0.2)' }} />
-                            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#FFBD2E', boxShadow: 'inset 0 0 4px rgba(0,0,0,0.2)' }} />
-                            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27C93F', boxShadow: 'inset 0 0 4px rgba(0,0,0,0.2)' }} />
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                            <div style={{ width: 'clamp(10px, 1.2vw, 12px)', height: 'clamp(10px, 1.2vw, 12px)', borderRadius: '50%', background: '#FF5F56', boxShadow: 'inset 0 0 4px rgba(0,0,0,0.2)' }} />
+                            <div style={{ width: 'clamp(10px, 1.2vw, 12px)', height: 'clamp(10px, 1.2vw, 12px)', borderRadius: '50%', background: '#FFBD2E', boxShadow: 'inset 0 0 4px rgba(0,0,0,0.2)' }} />
+                            <div style={{ width: 'clamp(10px, 1.2vw, 12px)', height: 'clamp(10px, 1.2vw, 12px)', borderRadius: '50%', background: '#27C93F', boxShadow: 'inset 0 0 4px rgba(0,0,0,0.2)' }} />
                         </div>
                     </div>
 
                     {/* Safari Address Bar Fake Chrome */}
                     <div style={{ 
                         background: 'rgba(0,0,0,0.3)', 
-                        padding: '16px', 
+                        padding: 'clamp(12px, 2vw, 16px)', 
                         borderBottom: '1px solid rgba(255,255,255,0.05)',
                         display: 'flex',
                         alignItems: 'center',
@@ -141,20 +150,25 @@ export default function LiveArchives() {
                         <div style={{ 
                             background: 'rgba(255,255,255,0.05)', 
                             border: '1px solid rgba(255,255,255,0.05)',
-                            padding: '8px 32px', 
+                            padding: 'clamp(6px, 1vw, 8px) clamp(16px, 3vw, 32px)', // Fluid padding
                             borderRadius: '8px',
                             color: 'rgba(255,255,255,0.6)',
-                            fontSize: '0.9rem',
+                            fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)', // Fluid text
                             fontFamily: 'system-ui, -apple-system, sans-serif',
                             display: 'flex',
                             alignItems: 'center',
                             gap: '10px',
                             width: '100%',
                             maxWidth: '500px',
-                            justifyContent: 'center'
+                            justifyContent: 'center',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
                         }}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                            {websites[activeIndex].url.replace('https://', '')}
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ flexShrink: 0 }}><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {websites[activeIndex].url.replace('https://', '')}
+                            </span>
                         </div>
                     </div>
 
@@ -198,11 +212,11 @@ export default function LiveArchives() {
                         onMouseLeave={e => e.currentTarget.style.opacity = '0'}
                         >
                             <div style={{
-                                padding: '16px 32px',
+                                padding: 'clamp(12px, 2vw, 16px) clamp(24px, 4vw, 32px)',
                                 background: 'rgba(255,255,255,0.1)',
                                 border: '1px solid rgba(255,255,255,0.2)',
                                 borderRadius: '40px',
-                                fontSize: '1rem',
+                                fontSize: 'clamp(0.8rem, 1.5vw, 1rem)',
                                 fontWeight: 'bold',
                                 fontFamily: 'system-ui, -apple-system, sans-serif',
                                 letterSpacing: '0.05em',
@@ -221,13 +235,14 @@ export default function LiveArchives() {
                 {/* --- RIGHT SECTION: TYPOGRAPHY --- */}
                 <div className="text-column" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', justifyContent: 'center' }}>
                     
-                    <div style={{ marginBottom: '30px', display: 'flex', alignItems: 'center', gap: '15px', width: '100%' }}>
+                    <div style={{ marginBottom: 'clamp(15px, 3vw, 30px)', display: 'flex', alignItems: 'center', gap: '15px', width: '100%' }}>
                         <span style={{ 
                             color: 'rgba(255,255,255,0.4)', 
-                            fontSize: '0.8rem', 
+                            fontSize: 'clamp(0.65rem, 1.5vw, 0.8rem)', 
                             fontFamily: 'TitleFont, sans-serif',
                             letterSpacing: '0.3em', 
                             textTransform: 'uppercase',
+                            whiteSpace: 'nowrap'
                         }}>
                             — DEPLOYMENTS / 06
                         </span>
@@ -236,12 +251,12 @@ export default function LiveArchives() {
                     
                     <h2 style={{
                         color: '#fff',
-                        fontSize: 'clamp(3.5rem, 6vw, 6rem)', // Increased max font size to match the larger scale
+                        fontSize: 'clamp(3rem, 8vw, 6rem)', 
                         fontWeight: 900,
                         lineHeight: 0.9,
                         letterSpacing: '-0.02em',
                         fontFamily: 'TitleFont, Impact, sans-serif',
-                        margin: '0 0 30px 0',
+                        margin: '0 0 clamp(15px, 3vw, 30px) 0',
                     }}>
                         live <br />
                         <span style={{ fontFamily: 'SubtitleFont' }}>
@@ -249,23 +264,26 @@ export default function LiveArchives() {
                         </span>
                     </h2>
 
-                    <p style={{
+                    <p className="desc-text" style={{
                         color: 'rgba(255,255,255,0.7)',
-                        fontSize: 'clamp(1.1rem, 2vw, 1.25rem)', // Slightly larger readable text
+                        fontSize: 'clamp(0.95rem, 2vw, 1.25rem)', 
                         lineHeight: '1.6',
                         fontFamily: 'TextFont, system-ui, sans-serif',
-                        maxWidth: '480px',
-                        marginBottom: '40px',
-                        minHeight: '60px', 
+                        width: '100%',
+                        maxWidth: '480px', // Prevents desktop lines from getting too long
+                        marginBottom: 'clamp(20px, 4vw, 40px)',
+                        minHeight: 'clamp(40px, 8vw, 60px)', 
                     }}>
                         {websites[activeIndex].desc}
                     </p>
 
                     {/* macOS Segmented Controls for Projects */}
-                    <div style={{
-                        display: 'inline-flex',
+                    <div className="controls-container" style={{
+                        display: 'flex',
+                        flexWrap: 'wrap', // Allows buttons to stack on tiny screens
+                        gap: '4px',
                         background: 'rgba(30, 30, 32, 0.8)',
-                        padding: '6px',
+                        padding: 'clamp(4px, 1vw, 6px)',
                         borderRadius: '12px',
                         border: '1px solid rgba(255,255,255,0.1)',
                         boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
@@ -278,18 +296,20 @@ export default function LiveArchives() {
                                     key={site.id}
                                     onClick={() => setActiveIndex(index)}
                                     style={{
-                                        padding: '12px 28px',
+                                        padding: 'clamp(8px, 1.5vw, 12px) clamp(16px, 3vw, 28px)', // Fluid padding
                                         background: isActive ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
                                         color: isActive ? '#fff' : 'rgba(255, 255, 255, 0.5)',
                                         border: 'none',
                                         borderRadius: '8px',
                                         boxShadow: isActive ? '0 4px 12px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.1)' : 'none',
-                                        fontSize: '0.9rem',
+                                        fontSize: 'clamp(0.75rem, 1.5vw, 0.9rem)', // Fluid text
                                         fontWeight: isActive ? 600 : 500,
                                         letterSpacing: '0.05em',
                                         fontFamily: 'system-ui, -apple-system, sans-serif',
                                         cursor: 'pointer',
                                         transition: 'all 0.3s ease',
+                                        flex: '1 1 auto', // Allows stretching to fill space on mobile
+                                        textAlign: 'center'
                                     }}
                                 >
                                     {site.title}
