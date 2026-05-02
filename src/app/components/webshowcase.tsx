@@ -23,7 +23,7 @@ export default function LiveArchives() {
             title: "BTEC UNIT TRACKER",
             url: "https://unit-pal-progress.lovable.app",
             image: "preview1.png",  
-            desc: "A progress tracker for my college assignments. Built with Loveable"
+            desc: "A progress tracker for my college assignments. Built with Loveable."
         }
     ];
 
@@ -89,6 +89,24 @@ export default function LiveArchives() {
                     .controls-container {
                         justify-content: center;
                     }
+                }
+                
+                /* Smooth scrollbar for image area */
+                .mac-window-scroll::-webkit-scrollbar {
+                    width: 14px;
+                }
+                .mac-window-scroll::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .mac-window-scroll::-webkit-scrollbar-thumb {
+                    background-color: rgba(255,255,255,0.3);
+                    border-radius: 20px;
+                    border: 3px solid #141416;
+                }
+
+                /* Overlay hover effect */
+                .preview-container:hover .preview-overlay {
+                    opacity: 1 !important;
                 }
             `}} />
 
@@ -172,64 +190,90 @@ export default function LiveArchives() {
                         </div>
                     </div>
 
-                    {/* Clickable Image Preview */}
-                    <a 
-                        href={websites[activeIndex].url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
+                    {/* Image Preview Container */}
+                    <div 
+                        className="preview-container"
                         style={{
-                            display: 'block',
                             width: '100%',
                             aspectRatio: '16/9', 
                             background: '#000',
                             position: 'relative',
-                            textDecoration: 'none',
                             overflow: 'hidden'
                         }}
                     >
-                        <div key={activeIndex} style={{ width: '100%', height: '100%', animation: 'fadeIn 0.5s ease-in-out' }}>
-                            <img 
-                                src={websites[activeIndex].image} 
-                                alt={websites[activeIndex].title} 
-                                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                            />
-                        </div>
-                        
-                        <div style={{
-                            position: 'absolute',
-                            inset: 0,
-                            background: 'rgba(0,0,0,0.4)',
-                            backdropFilter: 'blur(4px)',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            opacity: 0,
-                            transition: 'opacity 0.3s ease',
-                            color: '#fff',
-                        }}
-                        onMouseEnter={e => e.currentTarget.style.opacity = '1'}
-                        onMouseLeave={e => e.currentTarget.style.opacity = '0'}
-                        >
-                            <div style={{
-                                padding: 'clamp(12px, 2vw, 16px) clamp(24px, 4vw, 32px)',
-                                background: 'rgba(255,255,255,0.1)',
-                                border: '1px solid rgba(255,255,255,0.2)',
-                                borderRadius: '40px',
-                                fontSize: 'clamp(0.8rem, 1.5vw, 1rem)',
-                                fontWeight: 'bold',
-                                fontFamily: 'system-ui, -apple-system, sans-serif',
-                                letterSpacing: '0.05em',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '10px',
-                                boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
-                            }}>
-                                Open Live Site
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        {/* Scrollable Content */}
+                        <div className="mac-window-scroll" style={{
+                            width: '100%',
+                            height: '100%',
+                            overflowY: 'auto',
+                            overflowX: 'hidden'
+                        }}>
+                            <div key={activeIndex} style={{ width: '100%', animation: 'fadeIn 0.5s ease-in-out' }}>
+                                <img 
+                                    src={websites[activeIndex].image} 
+                                    alt={websites[activeIndex].title} 
+                                    style={{ width: '100%', height: 'auto', display: 'block' }} 
+                                />
                             </div>
                         </div>
-                    </a>
+                        
+                        {/* Overlay */}
+                        <div 
+                            className="preview-overlay"
+                            style={{
+                                position: 'absolute',
+                                inset: 0,
+                                background: 'rgba(0,0,0,0.4)',
+                                backdropFilter: 'blur(4px)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                opacity: 0,
+                                transition: 'opacity 0.3s ease',
+                                pointerEvents: 'none', // Lets scroll events pass through to the image
+                            }}
+                        >
+                            <a 
+                                href={websites[activeIndex].url} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                style={{
+                                    pointerEvents: 'auto', // Button is clickable
+                                    textDecoration: 'none',
+                                    color: '#fff',
+                                }}
+                            >
+                                <div style={{
+                                    padding: 'clamp(12px, 2vw, 16px) clamp(24px, 4vw, 32px)',
+                                    background: 'rgba(255,255,255,0.1)',
+                                    border: '1px solid rgba(255,255,255,0.2)',
+                                    borderRadius: '40px',
+                                    fontSize: 'clamp(0.8rem, 1.5vw, 1rem)',
+                                    fontWeight: 'bold',
+                                    fontFamily: 'system-ui, -apple-system, sans-serif',
+                                    letterSpacing: '0.05em',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '10px',
+                                    boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+                                    transition: 'transform 0.2s ease, background 0.2s ease'
+                                }}
+                                onMouseEnter={e => {
+                                    e.currentTarget.style.transform = 'scale(1.05)';
+                                    e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                                }}
+                                onMouseLeave={e => {
+                                    e.currentTarget.style.transform = 'scale(1)';
+                                    e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                                }}
+                                >
+                                    Open Live Site
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
                 {/* --- RIGHT SECTION: TYPOGRAPHY --- */}

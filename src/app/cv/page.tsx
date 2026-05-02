@@ -85,10 +85,13 @@ export default function DigitalCV() {
                 position: 'relative',
                 zIndex: 0,
                 padding: 'var(--section-pad)',
-                minHeight: '100vh',
+                height: '100vh',
+                overflow: 'hidden',
+                boxSizing: 'border-box',
                 fontFamily: 'TextFont, sans-serif',
                 display: 'flex',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                alignItems: 'center'
             }}>
             
             {/* CSS Variables & Animations tailored for macOS Dark Theme */}
@@ -133,7 +136,7 @@ export default function DigitalCV() {
 
                 /* Smooth scrollbar for content area (Dark Mode) */
                 .macos-content::-webkit-scrollbar {
-                    width: 8px;
+                    width: 14px;
                 }
                 .macos-content::-webkit-scrollbar-track {
                     background: transparent;
