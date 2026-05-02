@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import Navbar from '../navbar/Navbar';
 
 export default function DigitalCV() {
-    const [activeTab, setActiveTab] = useState('EXPERIENCE');
+    const [activeTab, setActiveTab] = useState('PROFILE');
 
     // Parsed CV Data
     const cvData = {
-        profile: "I'm Joshua, A Computer Scientist with a passion for Graphic Design and the complex architecture of our current digital era. My skills have only changed for the better through-out my 2 year BTEC college course and working alongside the NHS in their content creation department.",
+        profile: "I'm Joshua, a Computer Scientist with a passion for Graphic Design and the complex architecture of our current digital era. My skills have only improved throughout my 2-year BTEC college course, and through working alongside the NHS in their content creation department.",
         socials: [
             { platform: 'Instagram', handle: '@h4tfi3ld', link: '#' },
             { platform: 'X / Twitter', handle: '@h4tfi3ld', link: '#' },
@@ -33,7 +33,7 @@ export default function DigitalCV() {
                 location: 'Harbour, 13-14 Vaughan Parade, Torquay TQ2 5EG',
                 period: '07/2024 - PRESENT',
                 bullets: [
-                    'My first job which demonstrated the industry-standards to a professional workplace, how to interact with customers and provide overall great service to boost company representation.'
+                    'My first job, which demonstrated industry standards in a professional workplace, taught me how to interact with customers and provide overall great service to boost company representation.'
                 ]
             },
             {
@@ -65,7 +65,7 @@ export default function DigitalCV() {
             { unit: 'UNIT 4 - PROGRAMMING', grade: 'D' },
             { unit: 'UNIT 6 - WEBSITE DEVELOPMENT', grade: 'D' },
             { unit: 'UNIT 7 - MOBILE APPS DEVELOPMENT', grade: 'D' },
-            { unit: 'UNIT 8 - IT PROJECT MANAGEMENT', grade: 'P' },
+            { unit: 'UNIT 8 - IT PROJECT MANAGEMENT', grade: 'D' },
             { unit: 'UNIT 9 - COMPUTER GAMES DEV', grade: 'P' },
             { unit: 'UNIT 11 - CYBER SECURITY', grade: 'M' },
             { unit: 'UNIT 14 - IT SERVICE DELIVERY', grade: 'P' },
@@ -83,179 +83,222 @@ export default function DigitalCV() {
             <section className="cv-section" style={{
                 width: '100%',
                 position: 'relative',
-                zIndex: 10,
+                zIndex: 0,
                 padding: 'var(--section-pad)',
+                minHeight: '100vh',
+                fontFamily: 'TextFont, sans-serif',
+                display: 'flex',
+                justifyContent: 'center'
             }}>
             
-            {/* CSS Variables & Animations */}
+            {/* CSS Variables & Animations tailored for macOS Dark Theme */}
             <style dangerouslySetInnerHTML={{__html: `
                 .cv-section {
-                    --section-pad: 120px 0;
-                    --container-pad: 0 40px;
-                    --grid-layout: 280px 1fr;
+                    /* Increased top padding from 60px to 120px to clear the navbar */
+                    --section-pad: 120px 20px 60px 20px; 
+                    --grid-layout: 240px 1fr;
                     --menu-dir: column;
-                    --content-pad: 0 0 0 60px;
-                    --border-divider: 1px solid rgba(255,255,255,0.1);
+                    --window-radius: 12px;
                 }
 
                 /* Tablet Breakpoint */
                 @media (max-width: 1024px) {
                     .cv-section {
-                        --section-pad: 80px 0;
+                        --section-pad: 100px 15px 40px 15px; /* Also shifted down for tablet */
                         --grid-layout: 1fr; /* Stack menu on top */
                         --menu-dir: row;
-                        --content-pad: 40px 0 0 0;
-                        --border-divider: none;
+                    }
+                    .macos-sidebar {
+                        border-right: none !important;
+                        border-bottom: 1px solid #000000;
                     }
                     .cv-menu {
                         overflow-x: auto;
                         white-space: nowrap;
-                        padding-bottom: 20px;
-                        border-bottom: 1px solid rgba(255,255,255,0.1);
+                        padding-bottom: 10px;
                         -ms-overflow-style: none;
                         scrollbar-width: none;
                     }
                     .cv-menu::-webkit-scrollbar { display: none; }
                 }
 
-                /* Mobile Breakpoint */
-                @media (max-width: 768px) {
-                    .cv-section {
-                        --section-pad: 60px 0;
-                        --container-pad: 0 20px;
-                    }
-                }
-
                 .data-reveal {
-                    animation: revealData 0.3s cubic-bezier(0, 0.55, 0.45, 1) forwards;
+                    animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
                 }
 
-                @keyframes revealData {
-                    from { opacity: 0; clip-path: inset(0 100% 0 0); transform: translateX(-10px); }
-                    to { opacity: 1; clip-path: inset(0 0 0 0); transform: translateX(0); }
+                @keyframes fadeUp {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+
+                /* Smooth scrollbar for content area (Dark Mode) */
+                .macos-content::-webkit-scrollbar {
+                    width: 8px;
+                }
+                .macos-content::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .macos-content::-webkit-scrollbar-thumb {
+                    background-color: #555555;
+                    border-radius: 20px;
+                    border: 3px solid #1e1e1e;
                 }
             `}} />
 
+            {/* Main Window Container */}
             <div style={{
-                maxWidth: '1400px',
-                margin: '0 auto',
-                padding: 'var(--container-pad)',
+                width: '100%',
+                maxWidth: '1000px',
+                background: '#1e1e1e', // macOS dark window background
+                borderRadius: 'var(--window-radius)',
+                boxShadow: '0 30px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1)', // Deeper shadow for dark mode
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                height: '75vh',
+                minHeight: '550px'
             }}>
                 
-                {/* Header */}
-                <div style={{ marginBottom: '80px' }}>
-                    <span style={{ 
-                        color: 'rgba(255,255,255,0.4)', 
-                        fontSize: '0.8rem', 
-                        fontFamily: 'TitleFont, sans-serif',
-                        letterSpacing: '0.3em', 
-                        textTransform: 'uppercase',
-                        display: 'block',
-                        marginBottom: '15px'
+                {/* macOS Title Bar */}
+                <div style={{ 
+                    height: '40px', 
+                    background: '#2d2d2d', // Dark mode title bar
+                    borderBottom: '1px solid #000000', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    padding: '0 16px',
+                    position: 'relative'
+                }}>
+                    {/* Traffic Lights */}
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                        <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f56', border: '1px solid #e0443e' }} />
+                        <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ffbd2e', border: '1px solid #dea123' }} />
+                        <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27c93f', border: '1px solid #1aab29' }} />
+                    </div>
+                    {/* Window Title */}
+                    <div style={{
+                        position: 'absolute',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        color: '#dedede',
+                        fontSize: '0.85rem',
+                        fontWeight: 600,
+                        letterSpacing: '0.01em',
+                        fontFamily: 'SubtitleFont, sans-serif'
                     }}>
-                        — CV_MY_SEE / 1.1
-                    </span>
-                    <h2 style={{
-                        color: '#fff',
-                        fontSize: 'clamp(3rem, 8vw, 6rem)',
-                        fontWeight: 900,
-                        lineHeight: 0.85,
-                        letterSpacing: '-0.02em',
-                        margin: 0,
-                        fontFamily: 'SubtitleFont, Impact, sans-serif',
-                        textTransform: 'uppercase'
-                    }}>
-                        JOSHUA <br />
-                        <span style={{ color: 'transparent', WebkitTextStroke: '2px rgba(255,255,255,0.9)' }}>HATFIELD</span>
-                    </h2>
+                        Joshua Hatfield — CV
+                    </div>
                 </div>
 
                 {/* Main Split Layout */}
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'var(--grid-layout)',
-                    alignItems: 'start',
+                    flex: 1,
+                    overflow: 'hidden'
                 }}>
                     
-                    {/* Left: Directory Menu */}
-                    <div className="cv-menu" style={{ 
+                    {/* Left: Sidebar Menu (Finder Style) */}
+                    <div className="macos-sidebar" style={{ 
+                        background: '#282828', // Dark mode sidebar
+                        borderRight: '1px solid #000000',
+                        padding: '20px 12px',
                         display: 'flex', 
                         flexDirection: 'var(--menu-dir)' as 'column' | 'row',
-                        gap: '10px',
-                        borderRight: 'var(--border-divider)'
+                        gap: '4px'
                     }}>
-                        {tabs.map((tab, index) => {
+                        <div style={{ 
+                            padding: '0 10px', 
+                            marginBottom: '10px', 
+                            color: '#98989d', // Apple dark gray
+                            fontSize: '0.75rem', 
+                            fontWeight: 600, 
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.04em',
+                            fontFamily: 'BaseFont, sans-serif'
+                        }}>
+                            Favorites
+                        </div>
+
+                        {tabs.map((tab) => {
                             const isActive = activeTab === tab;
                             return (
                                 <button 
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
                                     style={{
-                                        padding: '16px 20px',
-                                        background: isActive ? '#fff' : 'transparent',
-                                        border: '1px solid',
-                                        borderColor: isActive ? '#fff' : 'rgba(255,255,255,0.1)',
-                                        color: isActive ? '#000' : 'rgba(255,255,255,0.5)',
-                                        fontFamily: '"Fira Code", monospace',
-                                        fontSize: '0.85rem',
-                                        letterSpacing: '0.1em',
+                                        padding: '8px 12px',
+                                        background: isActive ? '#007aff' : 'transparent', // Apple Blue stays the same
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        color: isActive ? '#ffffff' : '#dedede',
+                                        fontSize: '0.9rem',
+                                        fontWeight: isActive ? 600 : 400,
                                         textAlign: 'left',
                                         cursor: 'pointer',
-                                        transition: 'all 0.2s ease',
+                                        transition: 'background 0.1s ease',
                                         display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center'
+                                        alignItems: 'center',
+                                        gap: '10px',
+                                        fontFamily: 'SubtitleFont, sans-serif'
                                     }}
                                     onMouseEnter={e => {
-                                        if(!isActive) {
-                                            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.4)';
-                                            e.currentTarget.style.color = '#fff';
-                                        }
+                                        if(!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
                                     }}
                                     onMouseLeave={e => {
-                                        if(!isActive) {
-                                            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
-                                            e.currentTarget.style.color = 'rgba(255,255,255,0.5)';
-                                        }
+                                        if(!isActive) e.currentTarget.style.background = 'transparent';
                                     }}
                                 >
-                                    <span>0{index + 1} // {tab}</span>
-                                    {isActive && <span>■</span>}
+                                    {tab.charAt(0) + tab.slice(1).toLowerCase()}
                                 </button>
                             );
                         })}
                     </div>
 
-                    {/* Right: Data Output Pane */}
-                    <div style={{ padding: 'var(--content-pad)', minHeight: '500px' }}>
+                    {/* Right: Content Pane */}
+                    <div className="macos-content" style={{ 
+                        padding: '40px', 
+                        overflowY: 'auto',
+                        background: '#1e1e1e' // Dark mode content background
+                    }}>
                         
                         {/* PROFILE VIEW */}
                         {activeTab === 'PROFILE' && (
-                            <div className="data-reveal" style={{ display: 'flex', flexDirection: 'column', gap: '60px' }}>
+                            <div className="data-reveal" style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
                                 <div>
-                                    <span style={{ color: '#4ade80', fontSize: '0.8rem', fontFamily: 'monospace', letterSpacing: '0.1em', display: 'block', marginBottom: '20px' }}>&gt; EXECUTE PROFILE_READ</span>
-                                    <p style={{ color: '#fff', fontSize: 'clamp(1.2rem, 2.5vw, 1.8rem)', lineHeight: '1.4', fontFamily: 'TextFont, sans-serif', margin: 0 }}>
+                                    <h1 style={{ color: '#ffffff', fontSize: '2.5rem', fontWeight: 700, margin: '0 0 20px 0', letterSpacing: '-0.03em', fontFamily: 'TitleFont, sans-serif' }}>
+                                        Joshua Hatfield
+                                    </h1>
+                                    <p style={{ color: '#dedede', fontSize: '1.1rem', lineHeight: '1.6', margin: 0, fontFamily: 'TextFont, sans-serif' }}>
                                         {cvData.profile}
                                     </p>
                                 </div>
                                 
                                 <div>
-                                    <div style={{ width: '100%', height: '1px', background: 'rgba(255,255,255,0.1)', marginBottom: '30px' }} />
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '1px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                    <h3 style={{ color: '#ffffff', fontSize: '1.2rem', fontWeight: 600, margin: '0 0 15px 0', fontFamily: 'SubtitleFont, sans-serif' }}>Contact & Links</h3>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '15px' }}>
                                         {cvData.socials.map((social) => (
                                             <a key={social.platform} href={social.link} target="_blank" rel="noopener noreferrer" style={{
-                                                padding: '24px',
-                                                background: '#000',
+                                                padding: '16px',
+                                                background: '#2c2c2e', // macOS Dark mode secondary bg
+                                                borderRadius: '10px',
                                                 textDecoration: 'none',
                                                 display: 'flex',
                                                 flexDirection: 'column',
-                                                gap: '10px',
-                                                transition: 'background 0.2s ease'
+                                                gap: '4px',
+                                                transition: 'transform 0.2s ease, background 0.2s ease',
+                                                border: '1px solid rgba(255,255,255,0.05)'
                                             }}
-                                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
-                                            onMouseLeave={e => e.currentTarget.style.background = '#000'}>
-                                                <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{social.platform}</span>
-                                                <span style={{ color: '#fff', fontSize: '0.9rem', fontFamily: 'TextFont, sans-serif' }}>{social.handle}</span>
+                                            onMouseEnter={e => {
+                                                e.currentTarget.style.background = '#3a3a3c';
+                                                e.currentTarget.style.transform = 'scale(1.02)';
+                                            }}
+                                            onMouseLeave={e => {
+                                                e.currentTarget.style.background = '#2c2c2e';
+                                                e.currentTarget.style.transform = 'scale(1)';
+                                            }}>
+                                                <span style={{ color: '#98989d', fontSize: '0.8rem', fontWeight: 500, fontFamily: 'SubtitleFont, sans-serif' }}>{social.platform}</span>
+                                                <span style={{ color: '#0a84ff', fontSize: '0.95rem', fontWeight: 500, fontFamily: 'TextFont, sans-serif' }}>{social.handle}</span>
                                             </a>
                                         ))}
                                     </div>
@@ -266,52 +309,54 @@ export default function DigitalCV() {
                         {/* EXPERIENCE VIEW */}
                         {activeTab === 'EXPERIENCE' && (
                             <div className="data-reveal" style={{ display: 'flex', flexDirection: 'column' }}>
-                                <span style={{ color: '#4ade80', fontSize: '0.8rem', fontFamily: 'monospace', letterSpacing: '0.1em', display: 'block', marginBottom: '40px' }}>&gt; QUERY EXPERIENCE_DB</span>
+                                <h2 style={{ color: '#ffffff', fontSize: '2rem', fontWeight: 700, margin: '0 0 30px 0', letterSpacing: '-0.02em', fontFamily: 'TitleFont, sans-serif' }}>Experience</h2>
                                 
-                                {cvData.experience.map((job, idx) => (
-                                    <div key={idx} style={{ 
-                                        padding: '40px 0', 
-                                        borderBottom: '1px solid rgba(255,255,255,0.1)',
-                                        borderTop: idx === 0 ? '1px solid rgba(255,255,255,0.1)' : 'none'
-                                    }}>
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '20px' }}>
-                                            <div>
-                                                <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.7rem', fontFamily: 'monospace', letterSpacing: '0.1em', display: 'block', marginBottom: '8px' }}>[{job.type}]</span>
-                                                <h3 style={{ color: '#fff', fontSize: '1.5rem', fontFamily: 'TitleFont, sans-serif', margin: 0, textTransform: 'uppercase' }}>{job.role}</h3>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+                                    {cvData.experience.map((job, idx) => (
+                                        <div key={idx} style={{ 
+                                            paddingBottom: '30px', 
+                                            borderBottom: idx === cvData.experience.length - 1 ? 'none' : '1px solid #3a3a3c',
+                                        }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px', marginBottom: '12px' }}>
+                                                <div>
+                                                    <h3 style={{ color: '#ffffff', fontSize: '1.25rem', fontWeight: 600, margin: '0 0 4px 0', fontFamily: 'SubtitleFont, sans-serif' }}>{job.role}</h3>
+                                                    <div style={{ color: '#98989d', fontSize: '0.9rem', fontWeight: 500, fontFamily: 'TextFont, sans-serif' }}>{job.location}</div>
+                                                </div>
+                                                <div style={{ background: '#2c2c2e', padding: '4px 10px', borderRadius: '6px', color: '#dedede', fontSize: '0.85rem', fontWeight: 500, fontFamily: 'TextFont, sans-serif' }}>
+                                                    {job.period}
+                                                </div>
                                             </div>
-                                            <div style={{ textAlign: 'left' }}>
-                                                <div style={{ color: '#fff', fontSize: '0.9rem', fontFamily: 'monospace', marginBottom: '4px' }}>{job.period}</div>
-                                                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', fontFamily: 'TextFont, sans-serif' }}>{job.location}</div>
-                                            </div>
+                                            
+                                            <ul style={{ margin: 0, paddingLeft: '18px', color: '#a1a1a6', fontSize: '1rem', lineHeight: '1.5', fontFamily: 'TextFont, sans-serif' }}>
+                                                {job.bullets.map((bullet, bIdx) => (
+                                                    <li key={bIdx} style={{ marginBottom: '6px' }}>{bullet}</li>
+                                                ))}
+                                            </ul>
                                         </div>
-                                        
-                                        <ul style={{ margin: 0, paddingLeft: '20px', color: 'rgba(255,255,255,0.7)', fontSize: '1rem', lineHeight: '1.6', fontFamily: 'TextFont, sans-serif' }}>
-                                            {job.bullets.map((bullet, bIdx) => (
-                                                <li key={bIdx} style={{ marginBottom: '8px' }}>{bullet}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
                         )}
 
                         {/* EDUCATION VIEW */}
                         {activeTab === 'EDUCATION' && (
                             <div className="data-reveal" style={{ display: 'flex', flexDirection: 'column' }}>
-                                <span style={{ color: '#4ade80', fontSize: '0.8rem', fontFamily: 'monospace', letterSpacing: '0.1em', display: 'block', marginBottom: '40px' }}>&gt; FETCH ACADEMIC_RECORDS</span>
+                                <h2 style={{ color: '#ffffff', fontSize: '2rem', fontWeight: 700, margin: '0 0 30px 0', letterSpacing: '-0.02em', fontFamily: 'TitleFont, sans-serif' }}>Education</h2>
                                 
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
                                     {cvData.education.map((edu, idx) => (
                                         <div key={idx} style={{ 
-                                            padding: '40px', 
-                                            background: '#000',
+                                            padding: '24px', 
+                                            background: '#2c2c2e',
+                                            borderRadius: '12px',
+                                            border: '1px solid #3a3a3c'
                                         }}>
-                                            <h3 style={{ color: '#fff', fontSize: '1.4rem', fontFamily: 'SubtitleFont, sans-serif', margin: '0 0 20px 0', textTransform: 'uppercase' }}>{edu.school}</h3>
+                                            <h3 style={{ color: '#ffffff', fontSize: '1.1rem', fontWeight: 600, margin: '0 0 12px 0', fontFamily: 'SubtitleFont, sans-serif' }}>{edu.school}</h3>
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                                <div style={{ color: '#fff', fontSize: '0.85rem', fontFamily: 'monospace', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>
-                                                    <span style={{ color: 'rgba(255,255,255,0.4)', marginRight: '10px' }}>TERM:</span> {edu.period}
+                                                <div style={{ color: '#dedede', fontSize: '0.9rem', fontWeight: 500, fontFamily: 'TextFont, sans-serif' }}>
+                                                    <span style={{ color: '#98989d', marginRight: '6px' }}>Period:</span> {edu.period}
                                                 </div>
-                                                <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', fontFamily: 'TextFont, sans-serif', paddingTop: '8px' }}>
+                                                <div style={{ color: '#a1a1a6', fontSize: '0.9rem', fontFamily: 'TextFont, sans-serif' }}>
                                                     {edu.location}
                                                 </div>
                                             </div>
@@ -324,54 +369,54 @@ export default function DigitalCV() {
                         {/* PROJECTS VIEW */}
                         {activeTab === 'PROJECTS' && (
                             <div className="data-reveal">
-                                <span style={{ color: '#4ade80', fontSize: '0.8rem', fontFamily: 'monospace', letterSpacing: '0.1em', display: 'block', marginBottom: '40px' }}>&gt; LOAD BTEC_WORKLIST_ARRAY</span>
+                                <h2 style={{ color: '#ffffff', fontSize: '2rem', fontWeight: 700, margin: '0 0 30px 0', letterSpacing: '-0.02em', fontFamily: 'TitleFont, sans-serif' }}>BTEC Coursework</h2>
                                 
                                 <div style={{ 
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    borderTop: '1px solid rgba(255,255,255,0.2)'
+                                    background: '#2c2c2e',
+                                    borderRadius: '10px',
+                                    padding: '0 20px',
+                                    border: '1px solid #3a3a3c'
                                 }}>
                                     {cvData.projects.map((proj, idx) => {
-                                        // Stark color logic for grades
-                                        let gradeColor = '#fff';
-                                        if (proj.grade === 'D') gradeColor = '#4ade80'; // Distinction = Green
-                                        if (proj.grade === 'M') gradeColor = '#FFBD2E'; // Merit = Yellow
-                                        if (proj.grade === 'P') gradeColor = 'rgba(255,255,255,0.4)'; // Pass = Dim
+                                        // macOS dark mode styled grade logic
+                                        let gradeBg = '#3a3a3c';
+                                        let gradeColor = '#98989d';
+                                        
+                                        if (proj.grade === 'D') {
+                                            gradeBg = '#13301a'; // Dark green bg
+                                            gradeColor = '#32d74b'; // Apple bright green
+                                        }
+                                        if (proj.grade === 'M') {
+                                            gradeBg = '#10243e'; // Dark blue bg
+                                            gradeColor = '#0a84ff'; // Apple bright blue
+                                        }
 
                                         return (
                                             <div key={idx} style={{
                                                 display: 'flex',
                                                 justifyContent: 'space-between',
                                                 alignItems: 'center',
-                                                padding: '20px 0',
-                                                borderBottom: '1px solid rgba(255,255,255,0.1)',
-                                                transition: 'background 0.2s ease',
-                                            }}
-                                            onMouseEnter={e => {
-                                                e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-                                                e.currentTarget.style.paddingLeft = '15px';
-                                                e.currentTarget.style.paddingRight = '15px';
-                                            }}
-                                            onMouseLeave={e => {
-                                                e.currentTarget.style.background = 'transparent';
-                                                e.currentTarget.style.paddingLeft = '0';
-                                                e.currentTarget.style.paddingRight = '0';
-                                            }}
-                                            >
-                                                <span style={{ color: '#fff', fontSize: 'clamp(0.8rem, 2vw, 1rem)', fontFamily: 'TitleFont, sans-serif', textTransform: 'uppercase' }}>
+                                                padding: '16px 0',
+                                                borderBottom: idx === cvData.projects.length - 1 ? 'none' : '1px solid #3a3a3c',
+                                            }}>
+                                                <span style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: 500, fontFamily: 'BaseFont, sans-serif' }}>
                                                     {proj.unit}
                                                 </span>
                                                 <span style={{ 
+                                                    background: gradeBg,
                                                     color: gradeColor, 
-                                                    fontSize: '1rem', 
-                                                    fontFamily: '"Fira Code", monospace',
-                                                    fontWeight: 'bold',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '15px'
+                                                    fontSize: '0.85rem', 
+                                                    fontWeight: 600,
+                                                    padding: '4px 10px',
+                                                    borderRadius: '20px',
+                                                    display: 'inline-block',
+                                                    minWidth: '32px',
+                                                    textAlign: 'center',
+                                                    fontFamily: 'BaseFont, sans-serif'
                                                 }}>
-                                                    <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.6rem', fontWeight: 'normal' }}>GRADE</span> 
-                                                    [{proj.grade}]
+                                                    {proj.grade}
                                                 </span>
                                             </div>
                                         );
@@ -379,7 +424,6 @@ export default function DigitalCV() {
                                 </div>
                             </div>
                         )}
-
                     </div>
                 </div>
             </div>

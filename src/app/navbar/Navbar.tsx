@@ -164,7 +164,7 @@ export default function Navbar({ className }: NavbarProps) {
                 transform: 'translateY(-50%)'
             }}>
               <a
-                href="/contact"
+                href="mailto:hatfij08@gmail.com"
                 style={{
                   background: '#fff',
                   color: '#111',
@@ -291,7 +291,7 @@ export default function Navbar({ className }: NavbarProps) {
 
               {/* Contact Button */}
               <a
-                href="/contact"
+                href="mailto:hatfij08@gmail.com"
                 style={{
                   background: '#fff',
                   color: '#111',

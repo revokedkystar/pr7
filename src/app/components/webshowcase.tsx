@@ -16,14 +16,14 @@ export default function LiveArchives() {
             title: "ARTISAN CATERING",
             url: "https://artisan-web-one.vercel.app",
             image: "preview2.png", 
-            desc: "The primary design portfolio featuring a high-contrast brutalist grid and technical typography."
+            desc: "A simple cartering website showcasing events, food and appetizers. Built with React, Tailwind CSS, and Vercel."
         },
         { 
             id: '02',
             title: "BTEC UNIT TRACKER",
             url: "https://unit-pal-progress.lovable.app",
             image: "preview1.png",  
-            desc: "A digital architecture manifesto built with glassmorphism and ambient lighting effects."
+            desc: "A progress tracker for my college assignments. Built with Loveable"
         }
     ];
 
