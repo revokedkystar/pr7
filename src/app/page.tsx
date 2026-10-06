@@ -119,7 +119,7 @@ export default function Page() {
                         home of,
                     </span>
                     <div style={{ fontFamily: 'SubtitleFont, system-ui, sans-serif', fontWeight: 700, fontSize: 'clamp(2.5rem, 8vw, 4.2rem)', lineHeight: '1', textAlign: 'center', width: '100%' }}>
-                        <TextCycle texts={["PROJECT 7EVEN*", "@H4TI3LD", "KOVA GRAPHIC"]} />
+                        <TextCycle texts={["PROJECT 7EVEN*", "@H4TFI3LD", "KOVA GRAPHIC"]} />
                     </div>
                 </section>
 

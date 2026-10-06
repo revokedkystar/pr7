@@ -26,7 +26,7 @@ export default function Certificates() {
                         certificates={[
                             { title: 'Cloud Computing', issuer: 'Amazon Web Services', year: '2026', image: '/certificates/cloud_award.png', url: 'https://space.springpod.com/certificate/56tcr4tfsjmm/share' },
                             { title: 'Data Analytics', issuer: 'Barclays', year: '2026', image: '/certificates/analytics_award.jpg', url: 'https://space.springpod.com/certificate/k8d74c6uj4j8/share' },
-                            { title: 'Developmer', issuer: 'Barclays', year: '2026', image: '/certificates/dev_award.png', url: 'https://space.springpod.com/certificate/qcbnmfki0ka2/share' },
+                            { title: 'Developer', issuer: 'Barclays', year: '2026', image: '/certificates/dev_award.png', url: 'https://space.springpod.com/certificate/qcbnmfki0ka2/share' },
                             { title: 'Cyber Security', issuer: 'Drax Enterprise', year: '2026', image: '/certificates/drax_award.png', url: 'https://space.springpod.com/certificate/y89vmga09ja5/share' }
                         ]}
                     />

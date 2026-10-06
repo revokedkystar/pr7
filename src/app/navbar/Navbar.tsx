@@ -1,4 +1,5 @@
 import React, { ReactNode, AnchorHTMLAttributes, useState, useEffect } from 'react';
+import Link from 'next/link';
 
 interface NavLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
@@ -7,10 +8,10 @@ interface NavLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 
 function NavLink({ href, children, ...props }: NavLinkProps) {
   return (
-    <a href={href} className="nav-underline-link" {...props}>
+    <Link href={href} className="nav-underline-link" {...props}>
       {children}
       <span className="nav-underline" />
-    </a>
+    </Link>
   );
 }
 
@@ -135,7 +136,7 @@ export default function Navbar({ className }: NavbarProps) {
                 top: '45%', 
                 transform: 'translate(-50%, -50%)' 
             }}>
-              <a href="/" style={{ display: 'inline-block' }}>
+              <Link href="/" style={{ display: 'inline-block' }}>
                 <img
                   src="/images.png"
                   alt="Logo"
@@ -153,7 +154,7 @@ export default function Navbar({ className }: NavbarProps) {
                     e.currentTarget.classList.remove('logo-spin');
                   }}
                 />
-              </a>
+              </Link>
             </div>
 
             {/* Contact Button (right) */}
@@ -227,7 +228,7 @@ export default function Navbar({ className }: NavbarProps) {
                 top: '45%', 
                 transform: 'translate(-50%, -50%)' 
             }}>
-              <a href="/" style={{ display: 'inline-block' }}>
+              <Link href="/" style={{ display: 'inline-block' }}>
                 <img
                   src="/images.png"
                   alt="Logo"
@@ -245,7 +246,7 @@ export default function Navbar({ className }: NavbarProps) {
                     e.currentTarget.classList.remove('logo-spin');
                   }}
                 />
-              </a>
+              </Link>
             </div>
 
             {/* Right side controls (Theme Toggle + Contact) */}
@@ -360,7 +361,7 @@ export default function Navbar({ className }: NavbarProps) {
           >
             LINKTREE
           </a>
-          <a 
+          <Link 
             href="/cv" 
             style={{
               color: '#fff',
@@ -374,7 +375,7 @@ export default function Navbar({ className }: NavbarProps) {
             onClick={(e) => { e.stopPropagation(); closeMenu(); }}
           >
             CV
-          </a>
+          </Link>
           <button 
             onClick={(e) => { e.stopPropagation(); toggleTheme(); closeMenu(); }}
             style={{

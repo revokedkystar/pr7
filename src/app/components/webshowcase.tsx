@@ -16,7 +16,7 @@ export default function LiveArchives() {
             title: "ARTISAN CATERING",
             url: "https://artisan-web-one.vercel.app",
             image: "preview2.png", 
-            desc: "A simple cartering website showcasing events, food and appetizers. Built with React, Tailwind CSS, and Vercel."
+            desc: "A simple catering website showcasing events, food and appetizers. Built with React, Tailwind CSS, and Vercel."
         },
         { 
             id: '02',

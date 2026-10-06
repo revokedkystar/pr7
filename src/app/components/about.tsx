@@ -243,7 +243,7 @@ export default function About() {
                             marginBottom: '30px',
                             fontFamily: 'TextFont, sans-serif'
                         }}>
-                            My name is Joshua, I build immersive physical, digital and experiences at the intersection of street culture and clean interactive design. This website was built with the purpose of meeting the 7 core principles of web design.
+                            My name is Joshua, I build immersive physical and digital experiences at the intersection of street culture and clean interactive design. This website was built with the purpose of meeting the 7 core principles of web design.
                         </p>
 
                         <div style={{
