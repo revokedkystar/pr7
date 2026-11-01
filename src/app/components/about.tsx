@@ -61,11 +61,6 @@ function PreviewWindow({ project }: { project: Project }) {
         winRef.current.style.setProperty('--my', `${py * 100}%`);
     };
 
-    const onEnter = (e: React.PointerEvent<HTMLDivElement>) => {
-        if (e.pointerType !== 'mouse' || !winRef.current || !tiltRef.current) return;
-        gsap.to(tiltRef.current, { scale: 1.04, duration: 0.5, ease: 'expo.out' });
-    };
-
     const onLeave = () => {
         if (!tiltRef.current || !quick.current) return;
         quick.current.rx(0);
@@ -79,7 +74,6 @@ function PreviewWindow({ project }: { project: Project }) {
                 ref={winRef}
                 className="pv-window"
                 onPointerMove={onMove}
-                onPointerEnter={onEnter}
                 onPointerLeave={onLeave}
                 style={
                     {

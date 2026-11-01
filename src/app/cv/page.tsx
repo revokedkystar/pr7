@@ -102,22 +102,19 @@ export default function DigitalCV() {
                 alignItems: 'center'
             }}>
 
-                {/* CSS Variables & Animations tailored for macOS Dark Theme */}
                 <style dangerouslySetInnerHTML={{
                     __html: `
                 .cv-section {
-                    /* Increased top padding from 60px to 120px to clear the navbar */
                     --section-pad: 120px 20px 60px 20px; 
                     --grid-layout: 240px 1fr;
                     --menu-dir: column;
                     --window-radius: 12px;
                 }
 
-                /* Tablet Breakpoint */
                 @media (max-width: 1024px) {
                     .cv-section {
-                        --section-pad: 100px 15px 40px 15px; /* Also shifted down for tablet */
-                        --grid-layout: 1fr; /* Stack menu on top */
+                        --section-pad: 100px 15px 40px 15px;
+                        --grid-layout: 1fr;
                         --menu-dir: row;
                     }
                     .macos-sidebar {
@@ -143,7 +140,6 @@ export default function DigitalCV() {
                     to { opacity: 1; transform: translateY(0); }
                 }
 
-                /* Smooth scrollbar for content area (Dark Mode) */
                 .macos-content::-webkit-scrollbar {
                     width: 14px;
                 }
@@ -157,13 +153,12 @@ export default function DigitalCV() {
                 }
             `}} />
 
-                {/* Main Window Container */}
                 <div style={{
                     width: '100%',
                     maxWidth: '1000px',
-                    background: '#1e1e1e', // macOS dark window background
+                    background: '#1e1e1e',
                     borderRadius: 'var(--window-radius)',
-                    boxShadow: '0 30px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1)', // Deeper shadow for dark mode
+                    boxShadow: '0 30px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1)',
                     overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
@@ -171,23 +166,20 @@ export default function DigitalCV() {
                     minHeight: '550px'
                 }}>
 
-                    {/* macOS Title Bar */}
                     <div style={{
                         height: '40px',
-                        background: '#2d2d2d', // Dark mode title bar
+                        background: '#2d2d2d',
                         borderBottom: '1px solid #000000',
                         display: 'flex',
                         alignItems: 'center',
                         padding: '0 16px',
                         position: 'relative'
                     }}>
-                        {/* Traffic Lights */}
                         <div style={{ display: 'flex', gap: '8px' }}>
                             <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f56', border: '1px solid #e0443e' }} />
                             <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ffbd2e', border: '1px solid #dea123' }} />
                             <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27c93f', border: '1px solid #1aab29' }} />
                         </div>
-                        {/* Window Title */}
                         <div style={{
                             position: 'absolute',
                             left: '50%',
@@ -202,7 +194,6 @@ export default function DigitalCV() {
                         </div>
                     </div>
 
-                    {/* Main Split Layout */}
                     <div style={{
                         display: 'grid',
                         gridTemplateColumns: 'var(--grid-layout)',
@@ -210,9 +201,8 @@ export default function DigitalCV() {
                         overflow: 'hidden'
                     }}>
 
-                        {/* Left: Sidebar Menu (Finder Style) */}
                         <div className="macos-sidebar" style={{
-                            background: '#282828', // Dark mode sidebar
+                            background: '#282828',
                             borderRight: '1px solid #000000',
                             padding: '20px 12px',
                             display: 'flex',
@@ -222,7 +212,7 @@ export default function DigitalCV() {
                             <div style={{
                                 padding: '0 10px',
                                 marginBottom: '10px',
-                                color: '#98989d', // Apple dark gray
+                                color: '#98989d',
                                 fontSize: '0.75rem',
                                 fontWeight: 600,
                                 textTransform: 'uppercase',
@@ -240,7 +230,7 @@ export default function DigitalCV() {
                                         onClick={() => setActiveTab(tab)}
                                         style={{
                                             padding: '8px 12px',
-                                            background: isActive ? '#007aff' : 'transparent', // Apple Blue stays the same
+                                            background: isActive ? '#007aff' : 'transparent',
                                             border: 'none',
                                             borderRadius: '6px',
                                             color: isActive ? '#ffffff' : '#dedede',
@@ -267,14 +257,12 @@ export default function DigitalCV() {
                             })}
                         </div>
 
-                        {/* Right: Content Pane */}
                         <div className="macos-content" style={{
                             padding: '40px',
                             overflowY: 'auto',
-                            background: '#1e1e1e' // Dark mode content background
+                            background: '#1e1e1e'
                         }}>
 
-                            {/* PROFILE VIEW */}
                             {activeTab === 'PROFILE' && (
                                 <div className="data-reveal" style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
                                     <div>
@@ -292,7 +280,7 @@ export default function DigitalCV() {
                                             {cvData.socials.map((social) => (
                                                 <a key={social.platform} href={social.link} target="_blank" rel="noopener noreferrer" style={{
                                                     padding: '16px',
-                                                    background: '#2c2c2e', // macOS Dark mode secondary bg
+                                                    background: '#2c2c2e',
                                                     borderRadius: '10px',
                                                     textDecoration: 'none',
                                                     display: 'flex',
@@ -318,7 +306,6 @@ export default function DigitalCV() {
                                 </div>
                             )}
 
-                            {/* EXPERIENCE VIEW */}
                             {activeTab === 'EXPERIENCE' && (
                                 <div className="data-reveal" style={{ display: 'flex', flexDirection: 'column' }}>
                                     <h2 style={{ color: '#ffffff', fontSize: '2rem', fontWeight: 700, margin: '0 0 30px 0', letterSpacing: '-0.02em', fontFamily: 'TitleFont, sans-serif' }}>Experience</h2>
@@ -350,7 +337,6 @@ export default function DigitalCV() {
                                 </div>
                             )}
 
-                            {/* EDUCATION VIEW */}
                             {activeTab === 'EDUCATION' && (
                                 <div className="data-reveal" style={{ display: 'flex', flexDirection: 'column' }}>
                                     <h2 style={{ color: '#ffffff', fontSize: '2rem', fontWeight: 700, margin: '0 0 30px 0', letterSpacing: '-0.02em', fontFamily: 'TitleFont, sans-serif' }}>Education</h2>
@@ -383,7 +369,6 @@ export default function DigitalCV() {
                                 </div>
                             )}
 
-                            {/* QUALIFICATIONS VIEW */}
                             {activeTab === 'QUALIFICATIONS' && (
                                 <div className="data-reveal">
                                     <h2 style={{ color: '#ffffff', fontSize: '2rem', fontWeight: 700, margin: '0 0 30px 0', letterSpacing: '-0.02em', fontFamily: 'TitleFont, sans-serif' }}>Qualifications</h2>
@@ -397,21 +382,20 @@ export default function DigitalCV() {
                                         border: '1px solid #3a3a3c'
                                     }}>
                                         {cvData.qualifications.map((qual, idx) => {
-                                            // macOS dark mode styled grade logic
                                             let gradeBg = '#3a3a3c';
                                             let gradeColor = '#98989d';
 
                                             if (qual.grade === 'DDM') {
-                                                gradeBg = '#13301a'; // Dark green bg
-                                                gradeColor = '#32d74b'; // Apple bright green
+                                                gradeBg = '#13301a';
+                                                gradeColor = '#32d74b';
                                             }
                                             if (qual.grade === 'Studying') {
-                                                gradeBg = '#10243e'; // Dark blue bg
-                                                gradeColor = '#0a84ff'; // Apple bright blue
+                                                gradeBg = '#10243e';
+                                                gradeColor = '#0a84ff';
                                             }
                                             if (qual.grade === 'Future') {
-                                                gradeBg = '#3a2b10'; // Dark orange bg
-                                                gradeColor = '#ff9f0a'; // Apple bright orange
+                                                gradeBg = '#3a2b10';
+                                                gradeColor = '#ff9f0a';
                                             }
 
                                             return (

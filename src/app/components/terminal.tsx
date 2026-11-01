@@ -228,10 +228,6 @@ export default function TechStack() {
         el.style.setProperty("--mx", `${px * 100}%`);
         el.style.setProperty("--my", `${py * 100}%`);
     };
-    const onEnter = (e: React.PointerEvent<HTMLDivElement>) => {
-        if (e.pointerType !== "mouse") return;
-        tiltRef.current?.style.setProperty("--ts", "1.015");
-    };
     const onLeave = () => {
         const el = tiltRef.current;
         if (!el) return;
@@ -300,7 +296,7 @@ export default function TechStack() {
 
                     {/* Terminal */}
                     <div className="ts-term">
-                        <div ref={tiltRef} className="ts-tilt" onPointerMove={onMove} onPointerEnter={onEnter} onPointerLeave={onLeave}>
+                        <div ref={tiltRef} className="ts-tilt" onPointerMove={onMove} onPointerLeave={onLeave}>
                             <div className="ts-window">
                                 {/* window bar */}
                                 <div className="ts-bar">

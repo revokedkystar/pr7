@@ -5,89 +5,75 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const websites = [
-    {
-        id: '01',
-        title: 'ARTISAN CATERING',
-        tab: 'Artisan Catering',
-        url: 'https://artisan-web-one.vercel.app',
-        image: 'preview2.png',
-        desc: 'A simple catering website showcasing events, food and appetizers.',
-        stack: ['React', 'Tailwind CSS', 'Vercel'],
-    },
-    {
-        id: '02',
-        title: 'OJRFX Trading',
-        tab: 'OJRFX Trading',
-        url: 'https://ojrfx.vercel.app',
-        image: 'preview1.png',
-        desc: 'Website to connect a trader with new potential clients.',
-        stack: ['Next.js', 'TSX'],
-    },
-    {
-        id: '03',
-        title: 'LVAR',
-        tab: 'LVAR',
-        url: 'https://www.lvar.co.uk',
-        image: 'preview3.png',
-        desc: 'Garage-based repairs and mobile visits for cars, vans, motorhomes and campervans.',
-        stack: ['Garage Repairs', 'Mobile Visits', 'Newton Abbot'],
-    },
-];
+function SplitText({ text }: { text: string }) {
+    return <>{text}</>;
+}
 
-const mod = (a: number, b: number) => ((a % b) + b) % b;
-const prefersReduced = () =>
-    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function UrlText({ text }: { text: string }) {
+    return <>{text}</>;
+}
 
-// Words > chars, so each letter can rise on its own
-const SplitText = ({ text }: { text: string }) => (
-    <>
-        {text.split(' ').map((word, w) => (
-            <span key={w} style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'top', marginRight: '0.28em', paddingBottom: '0.1em' }}>
-                {word.split('').map((c, i) => (
-                    <span key={i} className="ch" style={{ display: 'inline-block' }}>{c}</span>
-                ))}
-            </span>
-        ))}
-    </>
-);
-
-// The address bar text "types in" letter by letter
-const UrlText = ({ text }: { text: string }) => (
-    <span style={{ display: 'inline-flex', overflow: 'hidden', whiteSpace: 'nowrap' }}>
-        {text.split('').map((c, i) => (
-            <span key={i} className="ch-url" style={{ display: 'inline-block' }}>{c}</span>
-        ))}
-    </span>
-);
-
-const Chevron = ({ dir }: { dir: 'left' | 'right' }) => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-        <path d={dir === 'left' ? 'M15 18l-6-6 6-6' : 'M9 18l6-6-6-6'} />
-    </svg>
-);
+function Chevron({ dir }: { dir: 'left' | 'right' }) {
+    const d = dir === 'left' ? 'M15 18l-6-6 6-6' : 'M9 18l6-6-6-6';
+    return (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d={d} />
+        </svg>
+    );
+}
 
 export default function LiveArchives() {
     const sectionRef = useRef<HTMLElement>(null);
-    const infoRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const tabsRef = useRef<HTMLDivElement>(null);
     const pillRef = useRef<HTMLDivElement>(null);
-    const pageAreaRef = useRef<HTMLDivElement>(null);
-    const ctaRef = useRef<HTMLDivElement>(null);
+    const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+    const pageRefs = useRef<Array<HTMLDivElement | null>>([]);
     const loadBarRef = useRef<HTMLDivElement>(null);
     const reloadIconRef = useRef<SVGSVGElement>(null);
-    const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-    const pageRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-    const prevActive = useRef(0);
-    const activeRef = useRef(0);
-    const zTop = useRef(1);
+    const prevActive = useRef<number | null>(null);
     const pillPlaced = useRef(false);
+    const pageAreaRef = useRef<HTMLDivElement>(null);
+    const ctaRef = useRef<HTMLDivElement>(null);
+    const infoRef = useRef<HTMLDivElement>(null);
+    const zTop = useRef(0);
+
+    const mod = (value: number, max: number) => ((value % max) + max) % max;
+    const prefersReduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const websites = [
+        {
+            id: '01',
+            title: 'ARTISAN CATERING',
+            tab: 'artisan',
+            url: 'https://artisan-web-one.vercel.app',
+            image: 'preview2.png',
+            desc: 'A simple catering website showcasing events, food and appetizers. Built with React, Tailwind CSS, and Vercel.',
+            stack: ['React', 'Tailwind CSS', 'Vercel'],
+        },
+        {
+            id: '02',
+            title: 'OJR FX Trading',
+            tab: 'ojrfx trading',
+            url: 'https://ojrfx.vercel.app',
+            image: 'preview1.png',
+            desc: 'A progress tracker for my college assignments. Built with Next.js.',
+            stack: ['Next.js', 'TSX', 'Vercel'],
+        },
+        {
+            id: '03',
+            title: 'LVAR',
+            tab: 'LVAR',
+            url: 'https://www.lvar.co.uk',
+            image: 'preview3.png',
+            desc: 'Garage-based repairs and mobile visits for cars, vans, motorhomes and campervans.',
+            stack: ['Garage Repairs', 'Mobile Visits', 'Newton Abbot'],
+        },
+    ];
 
     const [activeIndex, setActiveIndex] = useState(0);
     const [clock, setClock] = useState('');
     const active = websites[activeIndex];
-    activeRef.current = activeIndex;
 
     const n = websites.length;
     const goTo = (i: number) => setActiveIndex(mod(i, n));
@@ -146,8 +132,6 @@ export default function LiveArchives() {
 
         if (prefersReduced()) return;
         const ctx = gsap.context(() => {
-            gsap.fromTo('.ch-url', { yPercent: 120 }, { yPercent: 0, duration: 0.6, stagger: 0.015, ease: 'power4.out', delay: 0.2 });
-            gsap.fromTo('.ch', { yPercent: 115 }, { yPercent: 0, duration: 0.9, stagger: 0.025, ease: 'power4.out', delay: 0.3 });
             gsap.fromTo('.swap-in', { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: 'power3.out', delay: 0.45 });
         }, sectionRef);
         return () => ctx.revert();
@@ -180,7 +164,7 @@ export default function LiveArchives() {
     const onPageEnter = () => {
         gsap.to(ctaRef.current, { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out' });
         if (prefersReduced()) return;
-        const page = pageRefs.current[activeRef.current];
+        const page = pageRefs.current[activeIndex];
         const scroller = page?.querySelector('.scroller');
         const img = page?.querySelector('img') as HTMLImageElement | null;
         const area = pageAreaRef.current;
@@ -190,7 +174,7 @@ export default function LiveArchives() {
         gsap.to(scroller, { y: -max, duration: Math.min(Math.max(max / 220, 3), 12), ease: 'power1.inOut', overwrite: true });
     };
     const onPageLeave = () => {
-        const scroller = pageRefs.current[activeRef.current]?.querySelector('.scroller');
+        const scroller = pageRefs.current[activeIndex]?.querySelector('.scroller');
         gsap.to(scroller ?? [], { y: 0, duration: 1.4, ease: 'power3.inOut', overwrite: true });
         gsap.to(ctaRef.current, { y: 20, opacity: 0, duration: 0.4, ease: 'power3.in' });
     };

@@ -394,11 +394,6 @@ function ShowcaseCard({
         el.style.setProperty("--my", `${py * 100}%`);
     };
 
-    const handleEnter = (e: React.PointerEvent<HTMLDivElement>) => {
-        if (!isCenter || e.pointerType !== "mouse") return;
-        tiltRef.current?.style.setProperty("--ts", "1.04");
-    };
-
     const handleLeave = () => {
         const el = tiltRef.current;
         if (!el) return;
@@ -422,7 +417,6 @@ function ShowcaseCard({
                 ref={tiltRef}
                 className="kv-tilt"
                 onPointerMove={handleMove}
-                onPointerEnter={handleEnter}
                 onPointerLeave={handleLeave}
             >
                 <div className={`kv-flip ${isFlipped ? "is-flipped" : ""}`}>

@@ -318,11 +318,6 @@ function CertCard({ cert, d, onClick }: { cert: Cert; d: number; onClick: () => 
         el.style.setProperty("--my", `${py * 100}%`);
     };
 
-    const onEnter = (e: React.PointerEvent<HTMLDivElement>) => {
-        if (!isFront || e.pointerType !== "mouse") return;
-        tiltRef.current?.style.setProperty("--ts", "1.03");
-    };
-
     const onLeave = () => {
         const el = tiltRef.current;
         if (!el) return;
@@ -342,7 +337,7 @@ function CertCard({ cert, d, onClick }: { cert: Cert; d: number; onClick: () => 
                 pointerEvents: visible ? "auto" : "none",
             }}
         >
-            <div ref={tiltRef} className="cc-tilt" onPointerMove={onMove} onPointerEnter={onEnter} onPointerLeave={onLeave}>
+            <div ref={tiltRef} className="cc-tilt" onPointerMove={onMove} onPointerLeave={onLeave}>
                 <div className="cc-face">
                     {/* window bar */}
                     <div className="cc-bar">
